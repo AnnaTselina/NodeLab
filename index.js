@@ -12,11 +12,34 @@ const handleGetReq = (req, resp) => {
     }
 }
 
+const handlePostReq = (req, resp) => {
+    let body = [];
+    req.on('data', (chunk) => {
+        body.push(chunk);
+    })
+    req.on('end', () => {
+        body = Buffer.concat(body).toString();
+        const payload = JSON.parse(body);
+        if (Object.keys(payload).length) {
+            Products.addProduct(payload);
+            resp.end('New product added');
+        } else {
+            resp.end("An error happened processing the request");
+        }
+
+    })
+
+    req.on('error', ()=>{
+        resp.end('An error happpened processing the request.');
+    })
+}
 
 const requestHandler = (req, resp) => {
     if (req.method === 'GET') {
         return handleGetReq(req, resp)
-    } 
+    } else if (req.method === 'POST') {
+        return handlePostReq(req, resp)
+    }
 };
 
 const server = http.createServer(requestHandler);
