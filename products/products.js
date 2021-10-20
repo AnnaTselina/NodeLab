@@ -14,17 +14,17 @@ const products = [
 ];
 
 const getProducts = () => {
-    return JSON.stringify(products);
+    return products;
 }
 
 const addProduct = (prod) => {
     products.push(prod);
 }
 
-const Products = {
+const ProductsHelpers = {
     getProducts: getProducts,
     addProduct: addProduct
 };
 
-module.exports =  Products;
+module.exports =  ProductsHelpers;
 
