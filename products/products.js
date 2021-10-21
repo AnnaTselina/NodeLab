@@ -26,5 +26,5 @@ const ProductsHelpers = {
     addProduct: addProduct
 };
 
-module.exports =  ProductsHelpers;
+export default ProductsHelpers;
 
