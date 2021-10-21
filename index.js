@@ -11,7 +11,13 @@ app.get('/', (req, res) => {
 app.get(PRODUCTS_URL, (req, res) => {
     res.status(200);
     res.setHeader('content-type', 'application/json');
-    res.send(JSON.stringify(ProductsHelpers.getProducts()));
+    res.send(JSON.stringify(ProductsHelpers.getProducts()))
+})
+
+app.use((error, req, res, next)=>{
+    res.status(500);
+    res.setHeader('content-type', 'application/json');
+    res.send(JSON.stringify({"errorMessage": error.message}));
 })
 
 app.listen(port, () => {
