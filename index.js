@@ -1,4 +1,3 @@
-const { Console } = require('console');
 const http = require('http');
 const port = 3000;
 const PRODUCTS_URL = "/products"
