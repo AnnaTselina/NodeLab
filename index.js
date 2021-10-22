@@ -23,6 +23,10 @@ app.use((error, req, res, next)=>{
   }
 })
 
+app.all('*', (req, res) => {
+  res.status(404).json({errorMessage: "Page does not exist."});
+});
+
 app.listen(port, () => {
     console.log(`Server has been started on port ${port}...`)
   })
