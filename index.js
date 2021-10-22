@@ -4,20 +4,23 @@ const app = express();
 const port = process.env.PORT ?? 3000;
 const PRODUCTS_URL = "/products"
 
-app.get('/', (req, res) => {
-  res.send('Listening to your requests.')
-});
-
-app.get(PRODUCTS_URL, (req, res) => {
-    res.status(200);
-    res.setHeader('content-type', 'application/json');
-    res.send(JSON.stringify(ProductsHelpers.getProducts()))
+app.get(PRODUCTS_URL, (req, res, next) => {
+  try {
+    const products = ProductsHelpers.getProducts();
+    if (products) {
+      res.status(200).json({products})
+    } else {
+      res.status(400).json({errorMessage: "Products not found"})
+    }
+  } catch (e) {
+    next(e);
+  }
 })
 
 app.use((error, req, res, next)=>{
-    res.status(500);
-    res.setHeader('content-type', 'application/json');
-    res.send(JSON.stringify({"errorMessage": error.message}));
+  if (error) {
+    res.status(500).json({errorMessage: error.message});
+  }
 })
 
 app.listen(port, () => {
