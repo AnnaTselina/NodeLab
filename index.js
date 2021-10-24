@@ -1,56 +1,32 @@
-const http = require('http');
-const port = 3000;
+import ProductsHelpers from './products/products.js'
+import express from "express";
+const app = express();
+const port = process.env.PORT ?? 3000;
 const PRODUCTS_URL = "/products"
 
-const ProductsHelpers = require('./products/products');
-
-const handleProductsRequest = (req, resp) =>{
-    if (req.method === "GET") {
-        const products = ProductsHelpers.getProducts();
-        resp.writeHead(200, { "Content-Type": "application/json" });
-        resp.end(JSON.stringify(products));
-    } else if (req.method === "POST") {
-        let body = [];
-        req.on('data', (chunk) => {
-            body.push(chunk);
-        })
-        req.on('end', () => {
-            body = Buffer.concat(body).toString();
-            const payload = JSON.parse(body);
-            const requiredParams = ["displayName", "price"];
-            const missedParams = requiredParams.filter(param => !payload[param]);
-            if (missedParams.length) {
-                const errorMessage = {errorMessage: "Missing params: " + missedParams.join()};
-                resp.writeHead(400, { "Content-Type": "application/json" });
-                resp.end(JSON.stringify(errorMessage));
-            } else {
-                ProductsHelpers.addProduct(payload);
-                resp.writeHead(201, { "Content-Type": "application/json" });
-                resp.end(body);
-            }
-    
-        })
-        req.on('error', ()=>{
-            const errorMessage = {errorMessage: "An error happpened processing the request."}
-            resp.writeHead(500, { "Content-Type": "application/json" });
-            resp.end(JSON.stringify(errorMessage));
-        })
-    }
-}
-
-const requestHandler = (req, resp) => {
-    if (req.url === PRODUCTS_URL) {
-        handleProductsRequest(req, resp);
+app.get(PRODUCTS_URL, (req, res, next) => {
+  try {
+    const products = ProductsHelpers.getProducts();
+    if (products) {
+      res.status(200).json({products})
     } else {
-        resp.end("Listening to your requests")
+      res.status(400).json({errorMessage: "Products not found"})
     }
-};
-
-const server = http.createServer(requestHandler);
-
-server.listen(port, (err) => {
-    if (err) {
-        return console.log('Error while trying listening server', err)
-    }
-    console.log(`server is listening on ${port}`)
+  } catch (e) {
+    next(e);
+  }
 })
+
+app.use((error, req, res, next)=>{
+  if (error) {
+    res.status(500).json({errorMessage: error.message});
+  }
+})
+
+app.all('*', (req, res) => {
+  res.status(404).json({errorMessage: "Page does not exist."});
+});
+
+app.listen(port, () => {
+    console.log(`Server has been started on port ${port}...`)
+  })
