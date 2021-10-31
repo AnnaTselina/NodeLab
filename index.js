@@ -1,5 +1,6 @@
 import ProductsHelpers from './products/products.js'
 import express from "express";
+import './databases/mongoDB/index.js';
 const app = express();
 const port = process.env.PORT ?? 3000;
 const PRODUCTS_URL = "/products"
