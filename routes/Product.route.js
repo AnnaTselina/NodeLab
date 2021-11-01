@@ -6,8 +6,11 @@ const productRouter = express.Router();
 productRouter.get('/', async (req, resp, next) => {
     try {
         const results = await getAllProducts();
-        resp.send(results);
-
+        if (results) {
+          resp.status(200).json({results});
+        } else {
+          resp.status(400).json({errorMessage: "Products not found"});
+        }
       } catch(e) {
         next(e);
       }
