@@ -6,8 +6,20 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "isolatedModules": false,
+    "removeComments": true,
     /* Strict Type-Checking Options */
     "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "allowUnreachableCode": false,
+    "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUnusedParameters": false,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "useUnknownInCatchVariables": true,
     /* Module Resolution Options */
     "moduleResolution": "node",
     "esModuleInterop": true,
@@ -15,7 +27,8 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+
   },
   "include": ["src"]
 }

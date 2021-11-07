@@ -3,7 +3,7 @@ import {dbConnection} from './DA/DBManager';
 import {ProductsRouter} from './routes/products.route';
 
 const app: Application = express();
-const port = process.env.PORT ?? 3000;
+const port = process.env['PORT'] ?? 3000;
 const router = express.Router();
 
 dbConnection();

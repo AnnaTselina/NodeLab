@@ -1,9 +1,9 @@
 import mongoDBConnect from './mongoDB';
-import {IProduct, IProductsHelper} from '../types/types'
+import {IProductsHelper} from '../types/types'
 import ProductsTypegooseHelper from './helpers/productsTypegooseHelper';
 
 
-export let ProductsHelper: IProductsHelper<IProduct>;
+export let ProductsHelper: IProductsHelper;
 
 export const dbConnection = () => {
     mongoDBConnect();
