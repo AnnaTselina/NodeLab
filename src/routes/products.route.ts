@@ -1,6 +1,6 @@
 import {Router, Response, Request, NextFunction} from "express";
 
-export const ProductRouter = (router: Router): void => {
+export const ProductsRouter = (router: Router): void => {
     router.get('/products', async (req: Request, resp: Response, next: NextFunction) => {
         try {
             /* const data = await service.GetProducts();
