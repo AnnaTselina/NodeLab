@@ -12,7 +12,7 @@ const port = (_a = process.env.PORT) !== null && _a !== void 0 ? _a : 3000;
 const router = express_1.default.Router();
 (0, DBManager_1.dbConnection)();
 app.use('/', router);
-(0, products_route_1.ProductRouter)(router);
+(0, products_route_1.ProductsRouter)(router);
 app.use((error, req, res, next) => {
     if (error) {
         res.status(500).json({ errorMessage: error.message });
