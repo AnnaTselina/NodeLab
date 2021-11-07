@@ -1,10 +1,13 @@
 import express, {Application, Request, Response, NextFunction} from "express";
-//import '../databases/mongoDB/index.js';
+import {dbConnection} from './DA/DBManager';
 
-const app = express();
+const app: Application = express();
 const port = process.env.PORT ?? 3000;
+const router = express.Router();
 
-//app.use('/products', productRouter);
+dbConnection();
+
+app.use('/', router);
 
 app.use((error: {message: string}, req: Request, res: Response, next: NextFunction)=>{
   if (error) {
