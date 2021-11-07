@@ -2,12 +2,11 @@
   "name": "nodelab",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "type": "module",
+  "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "serve": "nodemon index.js"
+    "build": "tsc && nodemon dist/index.js"
   },
   "author": "Anna Celina",
   "license": "ISC",
@@ -18,6 +17,8 @@
     "mongoose": "^6.0.12"
   },
   "devDependencies": {
-    "nodemon": "^2.0.14"
+    "@types/express": "^4.17.13",
+    "nodemon": "^2.0.14",
+    "typescript": "^4.4.4"
   }
 }

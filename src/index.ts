@@ -1,13 +1,12 @@
-import express from "express";
-import productRouter from './routes/Product.route.js';
-import './databases/mongoDB/index.js';
+import express, {Application, Request, Response, NextFunction} from "express";
+//import '../databases/mongoDB/index.js';
 
 const app = express();
 const port = process.env.PORT ?? 3000;
 
-app.use('/products', productRouter);
+//app.use('/products', productRouter);
 
-app.use((error, req, res, next)=>{
+app.use((error: {message: string}, req: Request, res: Response, next: NextFunction)=>{
   if (error) {
     res.status(500).json({errorMessage: error.message});
   }
