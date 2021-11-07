@@ -1,5 +1,6 @@
 import {Router, Response, Request, NextFunction} from "express";
 import {ProductsService} from '../service/products.service';
+import HttpException from '../exceptions/exceptions'
 
 const productService = new ProductsService();
 
@@ -10,7 +11,7 @@ export const ProductsRouter = (router: Router): void => {
             if (data) {
                 resp.status(200).json({results: data});
             } else {
-            resp.status(400).json({errorMessage: "Products not found"});
+                next(new HttpException(400, "Product not found"));
             }
         }
         catch (err) {

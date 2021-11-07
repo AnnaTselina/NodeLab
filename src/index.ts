@@ -1,4 +1,5 @@
-import express, {Application, Request, Response, NextFunction} from "express";
+import express, {Application, Request, Response} from "express";
+import HttpException from './exceptions/exceptions'
 import {dbConnection} from './DA/DBManager';
 import {ProductsRouter} from './routes/products.route';
 
@@ -12,9 +13,11 @@ app.use('/', router);
 
 ProductsRouter(router);
 
-app.use((error: {message: string}, req: Request, res: Response, next: NextFunction)=>{
+app.use((error: HttpException, req: Request, res: Response)=>{
   if (error) {
-    res.status(500).json({errorMessage: error.message});
+    const status = error.status || 500;
+    const message = error.message || 'Something went wrong';
+    res.status(status).json({errorMessage: message});
   }
 })
 
