@@ -1,11 +1,14 @@
 import mongoose from 'mongoose';
+const mongoDBconnection = process.env['MONGODB_CONNECTION'];
 
 const mongoDBConnect = () => {
-    mongoose.connect('mongodb://localhost:27017/GameStore').then(()=>{
-    console.log("Mongo db connected");
-}, (e) => {
-    console.log(e);
-});
+    if (mongoDBconnection) {
+        mongoose.connect(mongoDBconnection).then(()=>{
+            console.log("Mongo db connected");
+        }, (e) => {
+            console.log(e);
+        });
+    }
 }
 
 export default mongoDBConnect;

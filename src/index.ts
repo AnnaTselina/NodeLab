@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import express, {Application, Request, Response} from "express";
 import HttpException from './exceptions/exceptions'
 import {dbConnection} from './DA/DBManager';
