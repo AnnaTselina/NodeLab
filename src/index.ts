@@ -9,7 +9,7 @@ const app: Application = express();
 const port = process.env['PORT'] ?? 3000;
 const router = express.Router();
 
-dbConnection();
+
 
 app.use('/', router);
 
@@ -27,6 +27,17 @@ app.all('*', (req, res) => {
   res.status(404).json({errorMessage: "Page does not exist."});
 });
 
-app.listen(port, () => {
-  console.log(`Server has been started on port ${port}...`)
-})
+const startApp = () => {
+  try {
+    dbConnection().then(()=>{
+      app.listen(port, () => {
+        console.log(`Server has been started on port ${port}...`)
+      })
+    });
+
+  } catch(e) {
+    console.log(e)
+  }
+}
+
+startApp();

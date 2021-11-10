@@ -5,8 +5,8 @@ import ProductsTypegooseHelper from './helpers/productsTypegooseHelper';
 
 export let ProductsHelper: IProductsHelper;
 
-export const dbConnection = () => {
-    mongoDBConnect();
+export const dbConnection = async () => {
+    await mongoDBConnect();
 
     ProductsHelper = new ProductsTypegooseHelper();
 }

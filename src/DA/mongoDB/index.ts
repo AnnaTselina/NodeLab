@@ -1,13 +1,15 @@
 import mongoose from 'mongoose';
 const mongoDBconnection = process.env['MONGODB_CONNECTION'];
 
-const mongoDBConnect = () => {
+const mongoDBConnect = async () => {
     if (mongoDBconnection) {
-        mongoose.connect(mongoDBconnection).then(()=>{
+        await mongoose.connect(mongoDBconnection).then(()=>{
             console.log("Mongo db connected");
         }, (e) => {
             console.log(e);
         });
+    } else {
+        throw new Error("MongoDB connection path missing.")
     }
 }
 
