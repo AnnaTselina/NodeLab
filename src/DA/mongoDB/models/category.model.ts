@@ -1,11 +1,11 @@
 import { prop, getModelForClass } from '@typegoose/typegoose';
 
 class CategoryClass {
-    @prop ({required: true})
-    public displayName!: string;
+  @prop({ required: true })
+  public displayName!: string;
 
-    @prop({required: true})
-    public createdAt!: Date
+  @prop({ required: true })
+  public createdAt!: Date;
 }
 
 const CategoryModel = getModelForClass(CategoryClass);

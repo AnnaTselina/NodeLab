@@ -1,8 +1,8 @@
-import {ProductsHelper} from '../DA/DBManager';
+import { ProductsHelper } from '../DA/DBManager';
 
 export class ProductsService {
-    public async getProducts() {
-        const data = await ProductsHelper.getProducts();
-        return data;
-    }
+  public async getProducts() {
+    const data = await ProductsHelper.getProducts();
+    return data;
+  }
 }
