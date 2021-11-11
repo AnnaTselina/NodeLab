@@ -7,6 +7,21 @@
         "plugin:prettier/recommended"
     ],
     "rules": {
-        "no-debugger": "error"
+        "no-debugger": "error",
+        "no-var": "error",
+        "prefer-const": "error",
+        "no-new-object": "error",
+        "object-shorthand": "error",
+        "prefer-destructuring": "error",
+        "prefer-template": "error",
+        "func-style": "warn",
+        "prefer-arrow-callback":"error",
+        "no-dupe-class-members": "error",
+        "no-useless-constructor": "error",
+        "no-duplicate-imports": "error",
+        "object-curly-newline": "error",
+        "no-iterator":"error",
+        "eqeqeq": "warn",
+        "no-case-declarations": "error"
     }
 }
