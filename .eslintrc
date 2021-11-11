@@ -6,5 +6,7 @@
     "extends": [
         "plugin:prettier/recommended"
     ],
-    "rules": {}
+    "rules": {
+        "no-debugger": "error"
+    }
 }
