@@ -11,6 +11,6 @@ export interface IProduct {
   price: number;
 }
 
-export interface IProductsHelper {
+export interface IProductRepository {
   getProducts: () => Promise<IProduct[]>;
 }

@@ -1,5 +1,5 @@
-import ProductModel from '../mongoDB/models/product.model';
-import { IProduct } from '../../types/types';
+import ProductModel from '../../mongoDB/models/product.model';
+import { IProduct } from '../../../types/types';
 
 class ProductsTypegooseHelper {
   async getProducts(): Promise<IProduct[]> {

@@ -1,13 +1,14 @@
 //import mongoDBConnect from './mongoDB';
-import { IProductsHelper } from '../types/types';
 //import ProductsTypegooseHelper from './helpers/productsTypegooseHelper';
+import { IProductRepository } from '../types/types';
+import ProductTypeOrmRepository from './helpers/product/productTypeOrmRepository';
 import postgreSQLConnect from './postgresql';
 
-export let ProductsHelper: IProductsHelper;
+export let ProductsHelper: IProductRepository;
 
 export const dbConnection = async () => {
-  /*await mongoDBConnect();
-
-  ProductsHelper = new ProductsTypegooseHelper();*/
+  //await mongoDBConnect();
   postgreSQLConnect();
+
+  ProductsHelper = new ProductTypeOrmRepository();
 };
