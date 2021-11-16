@@ -1,4 +1,6 @@
 import { createConnection } from 'typeorm';
+import { ProductEntity } from './entities/product.entity';
+import { CategoryEntity } from './entities/category.entity';
 
 const host = process.env['HOST'] || undefined;
 const port = process.env['POSTGRESQL_PORT'] || undefined;
@@ -14,7 +16,9 @@ const postgreSQLConnect = async () => {
       port: parseInt(port, 10),
       username,
       password,
-      database
+      database,
+      entities: [ProductEntity, CategoryEntity],
+      synchronize: true
     }).then(
       () => {
         console.log('PostgreSQL connected.');

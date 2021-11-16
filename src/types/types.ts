@@ -11,6 +11,12 @@ export interface IProduct {
   price: number;
 }
 
+export interface ICategory {
+  _id: number;
+  displayName: string;
+  createdAt: Date;
+}
+
 export interface IProductRepository {
   getProducts: () => Promise<IProduct[]>;
 }
