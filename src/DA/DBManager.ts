@@ -1,17 +1,22 @@
 import mongoDBConnect from './mongoDB';
-import ProductsTypegooseHelper from './helpers/product/productsTypegooseRepository';
-import { IProductRepository } from '../types/types';
-import ProductTypeOrmRepository from './helpers/product/productTypeOrmRepository';
 import postgreSQLConnect from './postgresql';
+import { IProductRepository, ICategoryRepository } from '../types/types';
+import ProductTypegooseRepository from './repositories/product/productsTypegooseRepository';
+import CategoryTypegooseRepository from './repositories/category/categoryTypegooseRepository';
+import ProductTypeOrmRepository from './repositories/product/productTypeOrmRepository';
+import CategoryTypeOrmRepository from './repositories/category/categoryTypeOrmRepository';
 
-export let ProductsHelper: IProductRepository;
+export let ProductRepository: IProductRepository;
+export let CategoryRepository: ICategoryRepository;
 
 export const dbConnection = async () => {
   if (process.env['DB'] === 'mongo') {
     await mongoDBConnect();
-    ProductsHelper = new ProductsTypegooseHelper();
+    ProductRepository = new ProductTypegooseRepository();
+    CategoryRepository = new CategoryTypegooseRepository();
   } else {
     await postgreSQLConnect();
-    ProductsHelper = new ProductTypeOrmRepository();
+    ProductRepository = new ProductTypeOrmRepository();
+    CategoryRepository = new CategoryTypeOrmRepository();
   }
 };

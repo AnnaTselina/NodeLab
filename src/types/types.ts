@@ -12,11 +12,15 @@ export interface IProduct {
 }
 
 export interface ICategory {
-  _id: number;
+  _id?: ObjectId | number;
   displayName: string;
   createdAt: Date;
 }
 
 export interface IProductRepository {
   getProducts: () => Promise<IProduct[]>;
+}
+
+export interface ICategoryRepository {
+  getCategories: () => Promise<ICategory[]>;
 }
