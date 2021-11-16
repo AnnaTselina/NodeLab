@@ -2,11 +2,11 @@ import { createConnection } from 'typeorm';
 import { ProductEntity } from './entities/product.entity';
 import { CategoryEntity } from './entities/category.entity';
 
-const host = process.env['HOST'] || undefined;
-const port = process.env['POSTGRESQL_PORT'] || undefined;
-const username = process.env['POSTGRESQL_USERNAME'] || undefined;
-const password = process.env['POSTGRESQL_PASSWORD'] || undefined;
-const database = process.env['POSTGRESQL_DATABASE'] || undefined;
+const host = process.env['HOST'];
+const port = process.env['POSTGRESQL_PORT'];
+const username = process.env['POSTGRESQL_USERNAME'];
+const password = process.env['POSTGRESQL_PASSWORD'];
+const database = process.env['POSTGRESQL_DATABASE'];
 
 const postgreSQLConnect = async () => {
   if (host && port && username && password && database) {
