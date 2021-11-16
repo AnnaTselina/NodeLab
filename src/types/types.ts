@@ -3,10 +3,10 @@ import mongoose from 'mongoose';
 type ObjectId = mongoose.Schema.Types.ObjectId;
 
 export interface IProduct {
-  _id: ObjectId;
+  _id?: ObjectId | number;
   displayName: string;
   createdAt: Date;
-  categoryId: ObjectId;
+  categoryId: ObjectId | number;
   totalRating: number;
   price: number;
 }
