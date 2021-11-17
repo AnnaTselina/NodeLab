@@ -1,4 +1,4 @@
-import { BaseEntity, Column, PrimaryGeneratedColumn, CreateDateColumn, Entity, ManyToOne } from 'typeorm';
+import { BaseEntity, Column, PrimaryGeneratedColumn, CreateDateColumn, Entity, ManyToMany, JoinTable } from 'typeorm';
 import { CategoryEntity } from './category.entity';
 
 @Entity('product')
@@ -18,6 +18,7 @@ export class ProductEntity extends BaseEntity {
   @Column()
   price!: number;
 
-  @ManyToOne(() => CategoryEntity, (category) => category._id)
+  @ManyToMany(() => CategoryEntity, (category) => category._id)
+  @JoinTable()
   categoryId!: number;
 }

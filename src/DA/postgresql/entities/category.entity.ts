@@ -1,4 +1,4 @@
-import { BaseEntity, Column, PrimaryGeneratedColumn, Entity, CreateDateColumn, OneToMany } from 'typeorm';
+import { BaseEntity, Column, PrimaryGeneratedColumn, Entity, CreateDateColumn, ManyToMany } from 'typeorm';
 import { ProductEntity } from './product.entity';
 
 @Entity('category')
@@ -10,6 +10,6 @@ export class CategoryEntity extends BaseEntity {
   createdAt!: Date;
 
   @PrimaryGeneratedColumn()
-  @OneToMany(() => ProductEntity, (product) => product.categoryId)
+  @ManyToMany(() => ProductEntity, (product) => product.categoryId)
   _id?: number;
 }
