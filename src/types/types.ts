@@ -3,14 +3,24 @@ import mongoose from 'mongoose';
 type ObjectId = mongoose.Schema.Types.ObjectId;
 
 export interface IProduct {
-  _id: ObjectId;
+  _id?: ObjectId | number;
   displayName: string;
   createdAt: Date;
-  categoryId: ObjectId;
+  categoryId: ObjectId | number;
   totalRating: number;
   price: number;
 }
 
-export interface IProductsHelper {
+export interface ICategory {
+  _id?: ObjectId | number;
+  displayName: string;
+  createdAt: Date;
+}
+
+export interface IProductRepository {
   getProducts: () => Promise<IProduct[]>;
+}
+
+export interface ICategoryRepository {
+  getCategories: () => Promise<ICategory[]>;
 }

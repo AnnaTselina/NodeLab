@@ -1,11 +1,22 @@
 import mongoDBConnect from './mongoDB';
-import { IProductsHelper } from '../types/types';
-import ProductsTypegooseHelper from './helpers/productsTypegooseHelper';
+import postgreSQLConnect from './postgresql';
+import { IProductRepository, ICategoryRepository } from '../types/types';
+import getProductRepository from './repositories/product/productRepository';
+import getCategoryRepository from './repositories/category/categoryRepository';
 
-export let ProductsHelper: IProductsHelper;
+export let ProductRepository: IProductRepository;
+export let CategoryRepository: ICategoryRepository;
 
 export const dbConnection = async () => {
-  await mongoDBConnect();
-
-  ProductsHelper = new ProductsTypegooseHelper();
+  if (process.env['DB']) {
+    if (process.env['DB'] === 'mongo') {
+      await mongoDBConnect();
+    } else {
+      await postgreSQLConnect();
+    }
+    ProductRepository = getProductRepository();
+    CategoryRepository = getCategoryRepository();
+  } else {
+    throw new Error('Missing database environmental variable.');
+  }
 };
