@@ -33,7 +33,8 @@
     "mongodb": "^4.1.3",
     "mongoose": "^6.0.12",
     "pg": "^8.7.1",
-    "typeorm": "^0.2.40"
+    "typeorm": "^0.2.40",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.0",
