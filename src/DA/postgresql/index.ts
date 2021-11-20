@@ -1,6 +1,7 @@
 import { createConnection } from 'typeorm';
 import { ProductEntity } from './entities/product.entity';
 import { CategoryEntity } from './entities/category.entity';
+import logger from '../../logger';
 
 const host = process.env['HOST'];
 const port = process.env['POSTGRESQL_PORT'];
@@ -22,10 +23,10 @@ const postgreSQLConnect = async () => {
       logging: process.env['NODE_ENV'] === 'dev'
     }).then(
       () => {
-        console.log('PostgreSQL connected.');
+        logger.info('PostgreSQL connected.');
       },
       (e) => {
-        console.error(e);
+        logger.error(`PostgreSQL connection failed: ${e.message}`);
       }
     );
   } else {

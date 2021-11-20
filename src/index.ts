@@ -4,7 +4,7 @@ import express, { Application, Request, Response, NextFunction } from 'express';
 import HttpException from './exceptions/exceptions';
 import { dbConnection } from './DA/DBManager';
 import { ProductsRouter } from './routes/products.route';
-import { apiLogger } from './logger';
+import logger from './logger';
 
 const app: Application = express();
 const port = process.env['PORT'] ?? 3000;
@@ -14,7 +14,7 @@ const generateApiLogMessage = (req: Request, resp: Response, next: NextFunction)
   const { method, url } = req;
   const { statusCode } = resp;
   const log = `${method}:${url} ${statusCode}`;
-  apiLogger.info(log);
+  logger.info(log);
   next();
 };
 

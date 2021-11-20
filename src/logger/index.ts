@@ -6,7 +6,9 @@ const customFormat = printf(({ level, message, timestamp }) => {
   return `${timestamp} ${level}: ${message} `;
 });
 
-export const apiLogger = createLogger({
+export const logger = createLogger({
   format: combine(colorize(), timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), customFormat),
   transports: [new transports.Console()]
 });
+
+export default logger;
