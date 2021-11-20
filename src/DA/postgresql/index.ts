@@ -18,7 +18,8 @@ const postgreSQLConnect = async () => {
       password,
       database,
       entities: [ProductEntity, CategoryEntity],
-      synchronize: true
+      synchronize: true,
+      logging: process.env['NODE_ENV'] === 'dev'
     }).then(
       () => {
         console.log('PostgreSQL connected.');

@@ -5,6 +5,9 @@ const mongoDBConnect = async () => {
   if (mongoDBconnection) {
     await mongoose.connect(mongoDBconnection).then(
       () => {
+        if (process.env['NODE_ENV'] === 'dev') {
+          mongoose.set('debug', true);
+        }
         console.log('Mongo db connected');
       },
       (e) => {
