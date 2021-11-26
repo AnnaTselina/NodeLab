@@ -1,27 +1,24 @@
 import dotenv from 'dotenv';
 dotenv.config();
-import express, { Application, Request, Response } from 'express';
-import HttpException from './exceptions/exceptions';
+import express, { Application } from 'express';
 import { dbConnection } from './DA/DBManager';
 import { ProductsRouter } from './routes/products.route';
+import { loggerMiddleware } from './middlewares/logger/logger.middleware';
+import { errorHandlerMiddleware } from './middlewares/errorHandler/errorHadler.middleware';
 
 const app: Application = express();
 const port = process.env['PORT'] ?? 3000;
 const router = express.Router();
 
+app.use(loggerMiddleware);
+
 app.use('/', router);
 
 ProductsRouter(router);
 
-app.use((error: HttpException, req: Request, res: Response) => {
-  if (error) {
-    const status = error.status || 500;
-    const message = error.message || 'Something went wrong';
-    res.status(status).json({ errorMessage: message });
-  }
-});
+app.use(errorHandlerMiddleware);
 
-app.all('*', (req, res) => {
+app.use((req, res) => {
   res.status(404).json({ errorMessage: 'Page does not exist.' });
 });
 

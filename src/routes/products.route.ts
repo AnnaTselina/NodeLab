@@ -11,7 +11,7 @@ export const ProductsRouter = (router: Router): void => {
       if (data) {
         resp.status(200).json({ results: data });
       } else {
-        next(new HttpException(400, 'Product not found'));
+        throw new HttpException(400, 'Product not found');
       }
     } catch (err) {
       next(err);
