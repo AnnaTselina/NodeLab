@@ -1,9 +1,14 @@
-import { IProductRepository, IProduct } from '../../../types/types';
+import { IProductRepository, IProduct, IProductSearchParams } from '../../../types/types';
 import { ProductEntity } from '../../postgresql/entities/product.entity';
+import { parseProductQueryParamsPostgres } from '../../../helpers/productParamsParser';
 
 class ProductTypeOrmRepository implements IProductRepository {
-  async getProducts(): Promise<IProduct[]> {
-    const data = await ProductEntity.find();
+  async getProducts(queryParams: IProductSearchParams): Promise<IProduct[]> {
+    const { filterParams, sortingParams } = parseProductQueryParamsPostgres(queryParams);
+    const data = await ProductEntity.find({
+      where: filterParams,
+      order: sortingParams
+    });
     return data;
   }
 }

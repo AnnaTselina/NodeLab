@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { FindOperator } from 'typeorm';
 
 type ObjectId = mongoose.Schema.Types.ObjectId;
 
@@ -17,10 +18,29 @@ export interface ICategory {
   createdAt: Date;
 }
 
+export interface IProductSearchParams {
+  displayName?: string;
+  minRating?: number;
+  price?: string;
+  sortBy?: string;
+}
+
 export interface IProductRepository {
-  getProducts: () => Promise<IProduct[]>;
+  getProducts: (queryParams: IProductSearchParams) => Promise<IProduct[]>;
 }
 
 export interface ICategoryRepository {
   getCategories: () => Promise<ICategory[]>;
+}
+
+export interface IProductFilterParamsMongo {
+  displayName?: string;
+  totalRating?: { $gte: number };
+  price?: { $gte: number; $lte: number };
+}
+
+export interface IProductFilterParamsPostgres {
+  displayName?: string;
+  totalRating?: FindOperator<number | undefined>;
+  price?: FindOperator<number | undefined>;
 }
