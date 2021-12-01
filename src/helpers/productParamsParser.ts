@@ -2,9 +2,11 @@ import { MoreThanOrEqual, Between, LessThanOrEqual } from 'typeorm';
 import { IProductSearchParams, IProductFilterParamsMongo, IProductFilterParamsPostgres } from '../types/types';
 
 export const parseProductQueryParamsMongo = (params: IProductSearchParams) => {
-  const { displayName, minRating, price, sortBy } = params;
+  const { displayName, minRating, price, sortBy, page = 1 } = params;
   const filterParams: IProductFilterParamsMongo = {};
   const sortingParams: { [index: string]: number } = {};
+  const pageSize = process.env['PAGE_SIZE'];
+  const skipParam = (Number(page) - 1) * Number(pageSize);
 
   if (displayName) {
     filterParams['displayName'] = displayName;
@@ -29,13 +31,15 @@ export const parseProductQueryParamsMongo = (params: IProductSearchParams) => {
     }
   }
 
-  return { filterParams, sortingParams };
+  return { filterParams, sortingParams, skipParam };
 };
 
 export const parseProductQueryParamsPostgres = (params: IProductSearchParams) => {
-  const { displayName, minRating, price, sortBy } = params;
+  const { displayName, minRating, price, sortBy, page } = params;
   const filterParams: IProductFilterParamsPostgres = {};
   const sortingParams: { [index: string]: string } = {};
+  const pageSize = process.env['PAGE_SIZE'];
+  const skipParam = (Number(page) - 1) * Number(pageSize);
 
   if (displayName) {
     filterParams['displayName'] = displayName;
@@ -67,5 +71,5 @@ export const parseProductQueryParamsPostgres = (params: IProductSearchParams) =>
     }
   }
 
-  return { filterParams, sortingParams };
+  return { filterParams, sortingParams, skipParam };
 };

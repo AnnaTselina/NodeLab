@@ -4,9 +4,10 @@ import { parseProductQueryParamsMongo } from '../../../helpers/productParamsPars
 
 class ProductTypegooseRepository {
   async getProducts(queryParams: IProductSearchParams): Promise<IProduct[]> {
-    const { filterParams, sortingParams } = parseProductQueryParamsMongo(queryParams);
+    const { filterParams, sortingParams, skipParam } = parseProductQueryParamsMongo(queryParams);
+    const pageSize = Number(process.env['PAGE_SIZE']);
 
-    const data = await ProductModel.find(filterParams).sort(sortingParams);
+    const data = await ProductModel.find(filterParams).skip(skipParam).limit(pageSize).sort(sortingParams);
     return data;
   }
 }

@@ -4,10 +4,13 @@ import { parseProductQueryParamsPostgres } from '../../../helpers/productParamsP
 
 class ProductTypeOrmRepository implements IProductRepository {
   async getProducts(queryParams: IProductSearchParams): Promise<IProduct[]> {
-    const { filterParams, sortingParams } = parseProductQueryParamsPostgres(queryParams);
+    const { filterParams, sortingParams, skipParam } = parseProductQueryParamsPostgres(queryParams);
+    const pageSize = Number(process.env['PAGE_SIZE']);
     const data = await ProductEntity.find({
       where: filterParams,
-      order: sortingParams
+      order: sortingParams,
+      skip: skipParam,
+      take: pageSize
     });
     return data;
   }

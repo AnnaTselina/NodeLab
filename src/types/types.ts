@@ -23,6 +23,7 @@ export interface IProductSearchParams {
   minRating?: number;
   price?: string;
   sortBy?: string;
+  page?: number;
 }
 
 export interface IProductRepository {
