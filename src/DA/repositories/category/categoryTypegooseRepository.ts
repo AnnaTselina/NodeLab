@@ -3,7 +3,7 @@ import { ICategory } from '../../../types/types';
 
 class CategoryTypegooseRepository {
   async getCategories(): Promise<ICategory[]> {
-    const data = await CategoryModel.find();
+    const data = await CategoryModel.find({}, '_id displayName');
     return data;
   }
 }

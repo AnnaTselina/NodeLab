@@ -3,7 +3,9 @@ import { CategoryEntity } from '../../postgresql/entities/category.entity';
 
 class CategoryTypeOrmRepository implements ICategoryRepository {
   async getCategories(): Promise<ICategory[]> {
-    const data = await CategoryEntity.find();
+    const data = await CategoryEntity.find({
+      select: ['_id', 'displayName']
+    });
     return data;
   }
 }

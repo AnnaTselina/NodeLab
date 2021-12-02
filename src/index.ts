@@ -3,6 +3,7 @@ dotenv.config();
 import express, { Application } from 'express';
 import { dbConnection } from './DA/DBManager';
 import { ProductsRouter } from './routes/products.route';
+import { CategoriesRouter } from './routes/categories.route';
 import { loggerMiddleware } from './middlewares/logger/logger.middleware';
 import { errorHandlerMiddleware } from './middlewares/errorHandler/errorHadler.middleware';
 
@@ -15,6 +16,7 @@ app.use(loggerMiddleware);
 app.use('/', router);
 
 ProductsRouter(router);
+CategoriesRouter(router);
 
 app.use(errorHandlerMiddleware);
 
