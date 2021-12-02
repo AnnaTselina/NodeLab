@@ -5,4 +5,9 @@ export class CategoryService {
     const data = await CategoryRepository.getCategories();
     return data;
   }
+
+  public async getCategoryById(id: string) {
+    const data = await CategoryRepository.getCategoryById(id);
+    return data;
+  }
 }

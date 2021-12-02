@@ -17,4 +17,17 @@ export const CategoriesRouter = (router: Router): void => {
       next(err);
     }
   });
+  router.get('/categories/:id', async (req: Request, resp: Response, next: NextFunction) => {
+    const { id } = req.params;
+    try {
+      const data = await categoryService.getCategoryById(id);
+      if (data) {
+        resp.status(200).json({ results: data });
+      } else {
+        throw new HttpException(400, `Category with id=${id} not found.`);
+      }
+    } catch (err) {
+      next(err);
+    }
+  });
 };

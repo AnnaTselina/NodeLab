@@ -32,6 +32,7 @@ export interface IProductRepository {
 
 export interface ICategoryRepository {
   getCategories: () => Promise<ICategory[]>;
+  getCategoryById: (id: string) => Promise<ICategory | null>;
 }
 
 export interface IProductFilterParamsMongo {

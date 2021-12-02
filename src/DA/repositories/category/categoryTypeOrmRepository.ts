@@ -8,6 +8,14 @@ class CategoryTypeOrmRepository implements ICategoryRepository {
     });
     return data;
   }
+
+  async getCategoryById(id: string): Promise<ICategory | null> {
+    const data = await CategoryEntity.findOne({
+      where: { _id: id },
+      select: ['_id', 'displayName']
+    });
+    return data ? data : null;
+  }
 }
 
 export default CategoryTypeOrmRepository;
