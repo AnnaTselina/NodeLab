@@ -10,10 +10,12 @@ class CategoryTypeOrmRepository implements ICategoryRepository {
   }
 
   async getCategoryById(id: string): Promise<ICategory | null> {
-    const data = await CategoryEntity.findOne({
-      where: { _id: id },
-      select: ['_id', 'displayName']
-    });
+    const data = await CategoryEntity.createQueryBuilder('category')
+      .where({ _id: id })
+      .innerJoin('category.products', 'product')
+      .select(['category._id', 'category.displayName', 'product.displayName', 'product.price', 'product.totalRating'])
+      .getOne();
+
     return data ? data : null;
   }
 }

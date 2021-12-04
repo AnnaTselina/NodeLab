@@ -9,7 +9,7 @@ class ProductClass {
   public createdAt!: Date;
 
   @prop({ required: true })
-  public categoryId!: mongoose.Schema.Types.ObjectId;
+  public categories!: mongoose.Schema.Types.ObjectId;
 
   @prop({ required: true, index: true })
   public totalRating!: number;

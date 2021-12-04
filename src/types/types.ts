@@ -7,7 +7,7 @@ export interface IProduct {
   _id?: ObjectId | number;
   displayName: string;
   createdAt: Date;
-  categoryId: ObjectId | number;
+  categories: ObjectId | ICategory[];
   totalRating: number;
   price: number;
 }
@@ -16,6 +16,7 @@ export interface ICategory {
   _id?: ObjectId | number;
   displayName: string;
   createdAt: Date;
+  products?: IProduct[];
 }
 
 export interface IProductSearchParams {
