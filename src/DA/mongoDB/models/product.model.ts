@@ -1,15 +1,15 @@
-import mongoose from 'mongoose';
-import { prop, getModelForClass } from '@typegoose/typegoose';
+import { prop, getModelForClass, Ref } from '@typegoose/typegoose';
+import { CategoryClass } from './category.model';
 
-class ProductClass {
+export class ProductClass {
   @prop({ required: true, index: { unique: true } })
   public displayName!: string;
 
   @prop({ required: true })
   public createdAt!: Date;
 
-  @prop({ required: true })
-  public categories!: mongoose.Schema.Types.ObjectId;
+  @prop({ required: true, ref: () => 'CategoryClass' })
+  public categories!: Ref<CategoryClass>[];
 
   @prop({ required: true, index: true })
   public totalRating!: number;
@@ -18,29 +18,28 @@ class ProductClass {
   public price!: number;
 }
 
-const ProductModel = getModelForClass(ProductClass);
+export const ProductModel = getModelForClass(ProductClass);
 
 /*
 ProductModel.create({
   displayName: 'GTA',
   createdAt: new Date(),
-  categoryId: '61843d4e4b7dfffb9e7439ff',
+  categories: ['61aca85674dc86f7ab57d789'],
   totalRating: 5,
   price: 65
 });
 ProductModel.create({
   displayName: 'Cyberpank 2077',
   createdAt: new Date(),
-  categoryId: '61843d4e4b7dfffb9e7439ff',
+  categories: ['61aca85674dc86f7ab57d789'],
   totalRating: 4,
   price: 60
 });
 ProductModel.create({
   displayName: 'Fifa',
   createdAt: new Date(),
-  categoryId: '61843c09f49e143f42495a08',
+  categories: ['61aca85674dc86f7ab57d789'],
   totalRating: 3,
   price: 35
-});*/
-
-export default ProductModel;
+});
+*/

@@ -1,14 +1,20 @@
-import CategoryModel from '../../mongoDB/models/category.model';
+import { CategoryModel } from '../../mongoDB/models/category.model';
+import { ProductClass } from '../../mongoDB/models/product.model';
 import { ICategory } from '../../../types/types';
 
 class CategoryTypegooseRepository {
-  async getCategories(): Promise<ICategory[]> {
+  async getCategories(): Promise<ICategory[] | null> {
     const data = await CategoryModel.find({}, '_id displayName');
-    return data;
+    return data ? data : null;
   }
 
   async getCategoryById(id: string): Promise<ICategory | null> {
-    const data = await CategoryModel.findOne({ _id: id }, '_id displayName');
+    const data = await CategoryModel.findOne({ _id: id }, '_id displayName').populate({
+      path: 'products',
+      model: ProductClass,
+      select: 'displayName price totalRating'
+    });
+
     return data ? data : null;
   }
 }

@@ -1,5 +1,8 @@
+import { CategoryClass } from './../DA/mongoDB/models/category.model';
+import { Ref } from '@typegoose/typegoose';
 import mongoose from 'mongoose';
 import { FindOperator } from 'typeorm';
+import { ProductClass } from '../DA/mongoDB/models/product.model';
 
 type ObjectId = mongoose.Schema.Types.ObjectId;
 
@@ -7,7 +10,7 @@ export interface IProduct {
   _id?: ObjectId | number;
   displayName: string;
   createdAt: Date;
-  categories: ObjectId | ICategory[];
+  categories: Ref<CategoryClass>[] | ICategory[];
   totalRating: number;
   price: number;
 }
@@ -16,7 +19,7 @@ export interface ICategory {
   _id?: ObjectId | number;
   displayName: string;
   createdAt: Date;
-  products?: IProduct[];
+  products?: Ref<ProductClass>[] | IProduct[];
 }
 
 export interface IProductSearchParams {
@@ -32,7 +35,7 @@ export interface IProductRepository {
 }
 
 export interface ICategoryRepository {
-  getCategories: () => Promise<ICategory[]>;
+  getCategories: () => Promise<ICategory[] | null>;
   getCategoryById: (id: string) => Promise<ICategory | null>;
 }
 

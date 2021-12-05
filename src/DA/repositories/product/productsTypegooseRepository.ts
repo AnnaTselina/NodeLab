@@ -1,9 +1,9 @@
-import ProductModel from '../../mongoDB/models/product.model';
-import { IProduct, IProductSearchParams } from '../../../types/types';
+import { ProductModel } from '../../mongoDB/models/product.model';
+import { IProductSearchParams } from '../../../types/types';
 import { parseProductQueryParamsMongo } from '../../../helpers/productParamsParser';
 
 class ProductTypegooseRepository {
-  async getProducts(queryParams: IProductSearchParams): Promise<IProduct[]> {
+  async getProducts(queryParams: IProductSearchParams) {
     const { filterParams, sortingParams, skipParam } = parseProductQueryParamsMongo(queryParams);
     const pageSize = Number(process.env['PAGE_SIZE']);
 
