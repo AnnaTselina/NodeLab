@@ -12,7 +12,8 @@ class CategoryTypegooseRepository {
     const data = await CategoryModel.findOne({ _id: id }, '_id displayName').populate({
       path: 'products',
       model: ProductClass,
-      select: 'displayName price totalRating'
+      options: { sort: { totalRating: 'DESC' }, limit: 3 },
+      select: 'displayName price totalRating -_id'
     });
 
     return data ? data : null;
