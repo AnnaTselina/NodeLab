@@ -19,8 +19,10 @@ export const CategoriesRouter = (router: Router): void => {
   });
   router.get('/categories/:id', async (req: Request, resp: Response, next: NextFunction) => {
     const { id } = req.params;
+    const queryParams = req.query;
+    console.log(queryParams);
     try {
-      const data = await categoryService.getCategoryById(id);
+      const data = await categoryService.getCategoryById(id, queryParams);
       if (data) {
         resp.status(200).json({ results: data });
       } else {

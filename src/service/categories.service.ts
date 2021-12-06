@@ -1,4 +1,5 @@
 import { CategoryRepository } from '../DA/DBManager';
+import { ICategorySearchParams } from '../types/types';
 
 export class CategoryService {
   public async getCategories() {
@@ -6,8 +7,8 @@ export class CategoryService {
     return data;
   }
 
-  public async getCategoryById(id: string) {
-    const data = await CategoryRepository.getCategoryById(id);
+  public async getCategoryById(id: string, queryParams: ICategorySearchParams) {
+    const data = await CategoryRepository.getCategoryById(id, queryParams);
     return data;
   }
 }

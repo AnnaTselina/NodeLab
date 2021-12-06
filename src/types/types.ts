@@ -30,13 +30,18 @@ export interface IProductSearchParams {
   page?: number;
 }
 
+export interface ICategorySearchParams {
+  includeProducts?: string;
+  includeTop3Products?: string;
+}
+
 export interface IProductRepository {
   getProducts: (queryParams: IProductSearchParams) => Promise<IProduct[]>;
 }
 
 export interface ICategoryRepository {
   getCategories: () => Promise<ICategory[] | null>;
-  getCategoryById: (categoryId: string) => Promise<ICategory | null>;
+  getCategoryById: (categoryId: string, queryParams: ICategorySearchParams) => Promise<ICategory | null>;
 }
 
 export interface IProductFilterParamsMongo {
