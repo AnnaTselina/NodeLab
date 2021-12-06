@@ -36,7 +36,7 @@ export interface IProductRepository {
 
 export interface ICategoryRepository {
   getCategories: () => Promise<ICategory[] | null>;
-  getCategoryById: (id: string) => Promise<ICategory | null>;
+  getCategoryById: (categoryId: string) => Promise<ICategory | null>;
 }
 
 export interface IProductFilterParamsMongo {

@@ -16,11 +16,11 @@ export class CategoryEntity extends BaseEntity {
   @JoinTable({
     name: 'products_categories',
     joinColumn: {
-      name: 'category',
+      name: 'category_id',
       referencedColumnName: '_id'
     },
     inverseJoinColumn: {
-      name: 'product',
+      name: 'product_id',
       referencedColumnName: '_id'
     }
   })
