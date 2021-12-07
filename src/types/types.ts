@@ -55,3 +55,13 @@ export interface IProductFilterParamsPostgres {
   totalRating?: FindOperator<number | undefined>;
   price?: FindOperator<number | undefined>;
 }
+
+export type IProductFilterParams<isMongo = true> = isMongo extends true
+  ? IProductFilterParamsMongo
+  : IProductFilterParamsPostgres;
+
+export interface IProductFilterParamsParsed<T> {
+  filterParams: IProductFilterParams<T>;
+  sortingParams: { [key: string]: string };
+  skipParam: number;
+}
