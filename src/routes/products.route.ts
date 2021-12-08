@@ -6,8 +6,9 @@ const productService = new ProductsService();
 
 export const ProductsRouter = (router: Router): void => {
   router.get('/products', async (req: Request, resp: Response, next: NextFunction) => {
+    const queryParams = req.query;
     try {
-      const data = await productService.getProducts();
+      const data = await productService.getProducts(queryParams);
       if (data) {
         resp.status(200).json({ results: data });
       } else {

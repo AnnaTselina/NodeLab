@@ -1,4 +1,4 @@
-import { BaseEntity, Column, PrimaryGeneratedColumn, Entity, CreateDateColumn, ManyToMany } from 'typeorm';
+import { BaseEntity, Column, PrimaryGeneratedColumn, Entity, CreateDateColumn, ManyToMany, JoinTable } from 'typeorm';
 import { ProductEntity } from './product.entity';
 
 @Entity('category')
@@ -10,6 +10,19 @@ export class CategoryEntity extends BaseEntity {
   createdAt!: Date;
 
   @PrimaryGeneratedColumn()
-  @ManyToMany(() => ProductEntity, (product) => product.categoryId)
   _id?: number;
+
+  @ManyToMany(() => ProductEntity, (product) => product.categories, { cascade: true })
+  @JoinTable({
+    name: 'products_categories',
+    joinColumn: {
+      name: 'category_id',
+      referencedColumnName: '_id'
+    },
+    inverseJoinColumn: {
+      name: 'product_id',
+      referencedColumnName: '_id'
+    }
+  })
+  products?: ProductEntity[];
 }
