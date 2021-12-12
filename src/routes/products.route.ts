@@ -15,10 +15,10 @@ export const ProductsRouter = (router: Router): void => {
       const queryParams = req.query;
       try {
         const data = await productService.getProducts(queryParams);
-        if (data) {
+        if (data && data.length) {
           resp.status(200).json({ results: data });
         } else {
-          throw new HttpException(404, 'Product(s) not found');
+          throw new HttpException(404, 'Product(s) not found.');
         }
       } catch (err) {
         next(err);

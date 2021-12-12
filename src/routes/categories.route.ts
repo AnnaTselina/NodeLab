@@ -8,10 +8,10 @@ export const CategoriesRouter = (router: Router): void => {
   router.get('/categories', async (req: Request, resp: Response, next: NextFunction) => {
     try {
       const data = await categoryService.getCategories();
-      if (data) {
+      if (data && data.length) {
         resp.status(200).json({ results: data });
       } else {
-        throw new HttpException(400, 'Categories not found');
+        throw new HttpException(404, 'Categories not found.');
       }
     } catch (err) {
       next(err);
@@ -25,7 +25,7 @@ export const CategoriesRouter = (router: Router): void => {
       if (data) {
         resp.status(200).json({ results: data });
       } else {
-        throw new HttpException(400, `Category with id=${id} not found.`);
+        throw new HttpException(404, `Category with id=${id} not found.`);
       }
     } catch (err) {
       next(err);
