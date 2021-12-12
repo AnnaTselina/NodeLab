@@ -51,3 +51,33 @@ export const validationProductsSchema = checkSchema(
   },
   ['params', 'query']
 );
+
+export const validationCategorySchema = checkSchema(
+  {
+    includeProducts: {
+      optional: true,
+      isBoolean: {
+        errorMessage: `Value for 'includeProducts' must be boolean.`
+      }
+    },
+    includeTop3Products: {
+      optional: true,
+      custom: {
+        options: (value, { req }) => {
+          if (req && req.query && req.query['includeProducts']) {
+            return true;
+          } else {
+            return false;
+          }
+        },
+        errorMessage: `Parameter 'includeTop3Products' must be followed by 'includeProducts' parameter.`,
+        bail: true
+      },
+      equals: {
+        options: 'top',
+        errorMessage: `Values for 'includeTop3Products' can be: 'top'.`
+      }
+    }
+  },
+  ['params', 'query']
+);
