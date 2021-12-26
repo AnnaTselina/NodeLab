@@ -19,9 +19,18 @@ class UserTypegooseRepository {
   }
 
   async updateUserInfo(username: string, newUserInfo: IUserUpdateProfileParams) {
+    const infoToBeUpdated: IUserUpdateProfileParams = {};
+
+    if (newUserInfo.firstname) {
+      infoToBeUpdated.firstname = newUserInfo.firstname;
+    }
+    if (newUserInfo.lastname) {
+      infoToBeUpdated.lastname = newUserInfo.lastname;
+    }
+
     const result = await UserModel.findOneAndUpdate(
       { username },
-      { ...newUserInfo },
+      { ...infoToBeUpdated },
       { new: true, fields: 'username firstname lastname' }
     );
     return result ? result : null;

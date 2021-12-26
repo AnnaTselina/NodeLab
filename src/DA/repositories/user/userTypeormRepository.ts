@@ -20,9 +20,18 @@ class UserTypeormRepository {
   }
 
   async updateUserInfo(username: string, newUserInfo: IUserUpdateProfileParams) {
+    const infoToBeUpdated: IUserUpdateProfileParams = {};
+
+    if (newUserInfo.firstname) {
+      infoToBeUpdated.firstname = newUserInfo.firstname;
+    }
+    if (newUserInfo.lastname) {
+      infoToBeUpdated.lastname = newUserInfo.lastname;
+    }
+
     const result = await UserEntity.createQueryBuilder()
       .update('user')
-      .set(newUserInfo)
+      .set(infoToBeUpdated)
       .where('username = :username', { username })
       .returning('username, firstname, lastname')
       .execute();
