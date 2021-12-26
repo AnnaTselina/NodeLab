@@ -14,6 +14,7 @@ import {
   generateRefreshToken,
   verifyRefreshToken
 } from '../helpers/tokenHelpers';
+import authenticateTokenMiddleware from '../middlewares/authorization/authorization.middleware';
 
 const userService = new UserService();
 
@@ -105,12 +106,18 @@ export const UsersRouter = (router: Router): void => {
     validationResultMiddleware,
     (req: Request, resp: Response, next: NextFunction) => {
       const { token } = req.body;
-      const deauthResult = deauthenticateRefreshToken(token);
-      if (deauthResult) {
-        resp.status(204).json({});
-      } else {
-        next(new HttpException(404, 'Logout unsuccessful. Check token.'));
+      try {
+        const deauthResult = deauthenticateRefreshToken(token);
+        if (deauthResult) {
+          resp.status(204).json({});
+        } else {
+          next(new HttpException(404, 'Logout unsuccessful. Check token.'));
+        }
+      } catch (err) {
+        next(err);
       }
     }
   );
+
+  router.put('/profile', authenticateTokenMiddleware, (req, resp, next) => {});
 };
