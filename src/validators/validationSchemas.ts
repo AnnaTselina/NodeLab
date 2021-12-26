@@ -2,6 +2,7 @@ import { checkSchema } from 'express-validator';
 
 const PRICE_REGEX = /^((0|[1-9]\d*)(\.\d+)?)?:((0|[1-9]\d*)(\.\d+)?)?$/;
 const SORTBY_REGEX = /(displayName|price|totalRating|createdAt)+:(asc|desc)+/;
+const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
 
 export const validationProductsSchema = checkSchema(
   {
@@ -80,4 +81,30 @@ export const validationCategorySchema = checkSchema(
     }
   },
   ['params', 'query']
+);
+
+export const validationUserRegistrateSchema = checkSchema(
+  {
+    username: {
+      exists: {
+        errorMessage: 'Username must be provided.',
+        bail: true
+      },
+      isEmail: {
+        errorMessage: 'Valid email must be provided as username.'
+      }
+    },
+    password: {
+      exists: {
+        errorMessage: 'Password must be provided.',
+        bail: true
+      },
+      matches: {
+        options: PASSWORD_REGEX,
+        errorMessage:
+          'Password must be at least 8 characters long, contain at least one lowercase and one uppercase letter, contain at least one special character.'
+      }
+    }
+  },
+  ['body']
 );
