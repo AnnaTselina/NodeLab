@@ -65,3 +65,21 @@ export interface IProductFilterParamsParsed<T> {
   sortingParams: { [key: string]: string };
   skipParam: number;
 }
+
+export interface IUserRepository {
+  createUser(userData: IUserRegistrationParams): Promise<string | null>;
+  getUserByUsername(username: string): Promise<IUserAccount | null>;
+}
+
+export interface IUserRegistrationParams {
+  username: string;
+  password: string;
+}
+
+export interface IUserAccount {
+  _id: ObjectId | number;
+  username: string;
+  password: string;
+}
+
+export type IUserId<isMongo = true> = isMongo extends true ? ObjectId : number;

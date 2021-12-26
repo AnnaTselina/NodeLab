@@ -15,5 +15,5 @@ export class UserEntity extends BaseEntity {
   lastname?: string;
 
   @PrimaryGeneratedColumn()
-  _id?: number;
+  _id!: number;
 }
