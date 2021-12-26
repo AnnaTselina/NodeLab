@@ -119,5 +119,23 @@ export const UsersRouter = (router: Router): void => {
     }
   );
 
-  router.put('/profile', authenticateTokenMiddleware, (req, resp, next) => {});
+  router.put('/profile', authenticateTokenMiddleware, async (req: Request, resp: Response, next: NextFunction) => {
+    const username = req.user.username;
+    const newUserData = req.body;
+    try {
+      const user = await userService.getUserByUsername(username);
+      if (user) {
+        const updateResult = await userService.updateUserInfo(username, newUserData);
+        if (updateResult) {
+          resp.status(200).json({ result: updateResult });
+        } else {
+          next(new HttpException(500, 'An error occured processing user update request.'));
+        }
+      } else {
+        next(new HttpException(400, 'User not found.'));
+      }
+    } catch (err) {
+      next(err);
+    }
+  });
 };

@@ -104,6 +104,12 @@ export const validationUserRegistrateSchema = checkSchema(
         errorMessage:
           'Password must be at least 8 characters long, contain at least one lowercase and one uppercase letter, contain at least one special character.'
       }
+    },
+    firstname: {
+      optional: true
+    },
+    lastname: {
+      optional: true
     }
   },
   ['body']

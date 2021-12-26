@@ -7,10 +7,10 @@ export class UserClass {
   @prop({ required: true })
   public password!: string;
 
-  @prop({ required: false })
+  @prop({ required: false, default: null })
   public firstname?: string;
 
-  @prop({ required: false })
+  @prop({ required: false, default: null })
   public lastname?: string;
 }
 

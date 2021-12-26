@@ -1,4 +1,4 @@
-import { IUserRegistrationParams } from '../../../types/types';
+import { IUserRegistrationParams, IUserUpdateProfileParams } from '../../../types/types';
 import { UserModel } from '../../mongoDB/models/user.model';
 import bcrypt from 'bcrypt';
 
@@ -15,6 +15,15 @@ class UserTypegooseRepository {
 
   async getUserByUsername(username: string) {
     const result = await UserModel.findOne({ username });
+    return result ? result : null;
+  }
+
+  async updateUserInfo(username: string, newUserInfo: IUserUpdateProfileParams) {
+    const result = await UserModel.findOneAndUpdate(
+      { username },
+      { ...newUserInfo },
+      { new: true, fields: 'username firstname lastname' }
+    );
     return result ? result : null;
   }
 }

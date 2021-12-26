@@ -1,4 +1,4 @@
-import { IUserRegistrationParams } from '../../../types/types';
+import { IUserRegistrationParams, IUserUpdateProfileParams } from '../../../types/types';
 import { UserEntity } from '../../postgresql/entities/user.entity';
 import bcrypt from 'bcrypt';
 
@@ -17,6 +17,17 @@ class UserTypeormRepository {
   async getUserByUsername(username: string) {
     const result = await UserEntity.createQueryBuilder('user').where({ username }).getOne();
     return result ? result : null;
+  }
+
+  async updateUserInfo(username: string, newUserInfo: IUserUpdateProfileParams) {
+    const result = await UserEntity.createQueryBuilder()
+      .update('user')
+      .set(newUserInfo)
+      .where('username = :username', { username })
+      .returning('username, firstname, lastname')
+      .execute();
+
+    return result ? result.raw[0] : null;
   }
 }
 
