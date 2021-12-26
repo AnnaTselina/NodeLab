@@ -1,10 +1,19 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import { validationAuthenticationSchema, validationUserRegistrateSchema } from '../validators/validationSchemas';
+import {
+  validationAuthenticationSchema,
+  validationUserRegistrateSchema,
+  validationRefreshTokenSchema
+} from '../validators/validationSchemas';
 import validationResultMiddleware from '../middlewares/validationResultHandler/validationResultHandler.middleware';
 import { UserService } from '../service/user.service';
 import HttpException from '../exceptions/exceptions';
 import bcrypt from 'bcrypt';
-import { generateAccessToken, generateRefreshToken } from '../helpers/tokenHelpers';
+import {
+  deauthenticateRefreshToken,
+  generateAccessToken,
+  generateRefreshToken,
+  verifyRefreshToken
+} from '../helpers/tokenHelpers';
 
 const userService = new UserService();
 
@@ -59,6 +68,48 @@ export const UsersRouter = (router: Router): void => {
         }
       } catch (err) {
         next(err);
+      }
+    }
+  );
+
+  router.post(
+    '/token',
+    validationRefreshTokenSchema,
+    validationResultMiddleware,
+    (req: Request, resp: Response, next: NextFunction) => {
+      const { token } = req.body;
+      try {
+        const result = verifyRefreshToken(token);
+        if (result) {
+          const newAccessToken = generateAccessToken(result['username']);
+          if (newAccessToken) {
+            resp.status(200).json({ accessToken: newAccessToken });
+          } else {
+            next(new HttpException(500, 'Internal server error'));
+          }
+        } else if (result === false) {
+          next(new HttpException(403, 'Not allowed.'));
+        } else {
+          next(new HttpException(500, 'Internal server error.'));
+        }
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
+
+  //for deleting refresh token
+  router.delete(
+    '/logout',
+    validationRefreshTokenSchema,
+    validationResultMiddleware,
+    (req: Request, resp: Response, next: NextFunction) => {
+      const { token } = req.body;
+      const deauthResult = deauthenticateRefreshToken(token);
+      if (deauthResult) {
+        resp.status(204).json({});
+      } else {
+        next(new HttpException(404, 'Logout unsuccessful. Check token.'));
       }
     }
   );

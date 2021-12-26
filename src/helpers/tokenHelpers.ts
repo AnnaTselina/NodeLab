@@ -20,3 +20,22 @@ export const generateRefreshToken = (username: string) => {
     return null;
   }
 };
+
+export const verifyRefreshToken = (token: string) => {
+  if (!process.env['REFRESH_TOKEN_SECRET']) {
+    return null;
+  } else {
+    const verificateTokenResult = jwt.verify(token, process.env['REFRESH_TOKEN_SECRET']);
+    //verify() return string (with error) if verification failed and jwt.JwtPayload if successful
+    return !!refreshTokensList[token] && (typeof verificateTokenResult === 'string' ? false : verificateTokenResult);
+  }
+};
+
+export const deauthenticateRefreshToken = (token: string) => {
+  if (refreshTokensList[token]) {
+    delete refreshTokensList[token];
+    return true;
+  } else {
+    return false;
+  }
+};

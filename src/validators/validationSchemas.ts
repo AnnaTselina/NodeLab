@@ -128,3 +128,14 @@ export const validationAuthenticationSchema = checkSchema(
   },
   ['body']
 );
+
+export const validationRefreshTokenSchema = checkSchema(
+  {
+    token: {
+      exists: {
+        errorMessage: 'Token must be provided.'
+      }
+    }
+  },
+  ['body']
+);
