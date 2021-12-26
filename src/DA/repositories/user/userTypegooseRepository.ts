@@ -26,6 +26,14 @@ class UserTypegooseRepository {
     );
     return result ? result : null;
   }
+
+  async updateUserPassword(username: string, newPassword: string) {
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    const result = await UserModel.findOneAndUpdate({ username }, { password: hashedPassword }, { new: true });
+    return result ? true : false;
+  }
 }
 
 export default UserTypegooseRepository;

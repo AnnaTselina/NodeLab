@@ -2,7 +2,9 @@ import { NextFunction, Request, Response, Router } from 'express';
 import {
   validationAuthenticationSchema,
   validationUserRegistrateSchema,
-  validationRefreshTokenSchema
+  validationRefreshTokenSchema,
+  validateUpdateUserInfoSchema,
+  validateUpdatePasswordSchema
 } from '../validators/validationSchemas';
 import validationResultMiddleware from '../middlewares/validationResultHandler/validationResultHandler.middleware';
 import { UserService } from '../service/user.service';
@@ -119,23 +121,60 @@ export const UsersRouter = (router: Router): void => {
     }
   );
 
-  router.put('/profile', authenticateTokenMiddleware, async (req: Request, resp: Response, next: NextFunction) => {
-    const username = req.user.username;
-    const newUserData = req.body;
-    try {
-      const user = await userService.getUserByUsername(username);
-      if (user) {
-        const updateResult = await userService.updateUserInfo(username, newUserData);
-        if (updateResult) {
-          resp.status(200).json({ result: updateResult });
+  router.put(
+    '/profile',
+    authenticateTokenMiddleware,
+    validateUpdateUserInfoSchema,
+    validationResultMiddleware,
+    async (req: Request, resp: Response, next: NextFunction) => {
+      const username = req.user.username;
+      const newUserData = req.body;
+      try {
+        const user = await userService.getUserByUsername(username);
+        if (user) {
+          const updateResult = await userService.updateUserInfo(username, newUserData);
+          if (updateResult) {
+            resp.status(200).json({ result: updateResult });
+          } else {
+            next(new HttpException(500, 'An error occured processing user update request.'));
+          }
         } else {
-          next(new HttpException(500, 'An error occured processing user update request.'));
+          next(new HttpException(400, 'User not found.'));
         }
-      } else {
-        next(new HttpException(400, 'User not found.'));
+      } catch (err) {
+        next(err);
       }
-    } catch (err) {
-      next(err);
     }
-  });
+  );
+
+  router.post(
+    '/profile/password',
+    authenticateTokenMiddleware,
+    validateUpdatePasswordSchema,
+    validationResultMiddleware,
+    async (req: Request, resp: Response, next: NextFunction) => {
+      const username = req.user.username;
+      const { oldPassword, newPassword } = req.body;
+      try {
+        const user = await userService.getUserByUsername(username);
+        if (user) {
+          const passwordMatch = await bcrypt.compare(oldPassword, user.password);
+          if (passwordMatch) {
+            const passwordUpdated = await userService.updateUserPassword(username, newPassword);
+            if (passwordUpdated) {
+              resp.status(200).json({ result: 'Password successfully updated.' });
+            } else {
+              next(new HttpException(500, 'An error occured processing password update request.'));
+            }
+          } else {
+            next(new HttpException(400, 'Incorrect old password.'));
+          }
+        } else {
+          next(new HttpException(400, 'User not found.'));
+        }
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
 };

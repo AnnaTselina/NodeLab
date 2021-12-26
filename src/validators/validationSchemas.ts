@@ -145,3 +145,36 @@ export const validationRefreshTokenSchema = checkSchema(
   },
   ['body']
 );
+
+export const validateUpdateUserInfoSchema = checkSchema(
+  {
+    firstname: {
+      optional: true
+    },
+    lastname: {
+      optional: true
+    }
+  },
+  ['body']
+);
+
+export const validateUpdatePasswordSchema = checkSchema(
+  {
+    oldPassword: {
+      exists: {
+        errorMessage: 'Old password must be provided.'
+      }
+    },
+    newPassword: {
+      exists: {
+        errorMessage: 'New password must be provided.'
+      },
+      matches: {
+        options: PASSWORD_REGEX,
+        errorMessage:
+          'Password must be at least 8 characters long, contain at least one lowercase and one uppercase letter, contain at least one special character.'
+      }
+    }
+  },
+  ['body']
+);

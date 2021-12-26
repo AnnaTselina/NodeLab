@@ -70,6 +70,7 @@ export interface IUserRepository {
   createUser(userData: IUserRegistrationParams): Promise<string | null>;
   getUserByUsername(username: string): Promise<IUserAccount | null>;
   updateUserInfo(username: string, newUserInfo: IUserUpdateProfileParams): Promise<IUserAccount | null>;
+  updateUserPassword(username: string, newPassword: string): Promise<boolean>;
 }
 
 export interface IUserRegistrationParams {

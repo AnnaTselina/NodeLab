@@ -29,6 +29,19 @@ class UserTypeormRepository {
 
     return result ? result.raw[0] : null;
   }
+
+  async updateUserPassword(username: string, newPassword: string) {
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    const result = await UserEntity.createQueryBuilder()
+      .update('user')
+      .set({ password: hashedPassword })
+      .where('username = :username', { username })
+      .execute();
+
+    return result ? true : false;
+  }
 }
 
 export default UserTypeormRepository;

@@ -16,4 +16,9 @@ export class UserService {
     const data = await UserRepository.updateUserInfo(username, newUserInfo);
     return data;
   }
+
+  public async updateUserPassword(username: string, newPassword: string) {
+    const data = await UserRepository.updateUserPassword(username, newPassword);
+    return data;
+  }
 }
