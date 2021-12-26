@@ -1,8 +1,10 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import { validationUserRegistrateSchema } from '../validators/validationSchemas';
+import { validationAuthenticationSchema, validationUserRegistrateSchema } from '../validators/validationSchemas';
 import validationResultMiddleware from '../middlewares/validationResultHandler/validationResultHandler.middleware';
 import { UserService } from '../service/user.service';
 import HttpException from '../exceptions/exceptions';
+import bcrypt from 'bcrypt';
+import { generateAccessToken, generateRefreshToken } from '../helpers/tokenHelpers';
 
 const userService = new UserService();
 
@@ -24,6 +26,36 @@ export const UsersRouter = (router: Router): void => {
           } else {
             next(new HttpException(500, 'An error occured processing user create request.'));
           }
+        }
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
+
+  router.post(
+    '/authenticate',
+    validationAuthenticationSchema,
+    validationResultMiddleware,
+    async (req: Request, resp: Response, next: NextFunction) => {
+      const { username, password } = req.body;
+      try {
+        const user = await userService.getUserByUsername(username);
+        if (user) {
+          const passwordMatch = await bcrypt.compare(password, user.password);
+          if (passwordMatch) {
+            const accessToken = generateAccessToken(username);
+            const refreshToken = generateRefreshToken(username);
+            if (accessToken && refreshToken) {
+              resp.status(200).json({ accessToken, refreshToken });
+            } else {
+              next(new HttpException(500, 'Internal server error'));
+            }
+          } else {
+            next(new HttpException(400, 'Incorrect password.'));
+          }
+        } else {
+          next(new HttpException(400, 'User with provided username does not exist.'));
         }
       } catch (err) {
         next(err);

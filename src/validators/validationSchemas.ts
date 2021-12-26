@@ -108,3 +108,23 @@ export const validationUserRegistrateSchema = checkSchema(
   },
   ['body']
 );
+
+export const validationAuthenticationSchema = checkSchema(
+  {
+    username: {
+      exists: {
+        errorMessage: 'Username must be provided.',
+        bail: true
+      },
+      isEmail: {
+        errorMessage: 'Valid email must be provided as username.'
+      }
+    },
+    password: {
+      exists: {
+        errorMessage: 'Password must be provided.'
+      }
+    }
+  },
+  ['body']
+);
