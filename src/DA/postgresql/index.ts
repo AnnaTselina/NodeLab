@@ -2,6 +2,7 @@ import { createConnection } from 'typeorm';
 import { ProductEntity } from './entities/product.entity';
 import { CategoryEntity } from './entities/category.entity';
 import logger from '../../logger';
+import { UserEntity } from './entities/user.entity';
 
 const host = process.env['HOST'];
 const port = process.env['POSTGRESQL_PORT'];
@@ -18,7 +19,7 @@ const postgreSQLConnect = async () => {
       username,
       password,
       database,
-      entities: [ProductEntity, CategoryEntity],
+      entities: [ProductEntity, CategoryEntity, UserEntity],
       synchronize: true,
       logging: process.env['NODE_ENV'] === 'dev'
     }).then(

@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import { FindOperator } from 'typeorm';
 import { ProductClass } from '../DA/mongoDB/models/product.model';
 
-type ObjectId = mongoose.Schema.Types.ObjectId;
+export type ObjectId = mongoose.Schema.Types.ObjectId;
 
 export interface IProduct {
   _id?: ObjectId | number;
@@ -64,4 +64,29 @@ export interface IProductFilterParamsParsed<T> {
   filterParams: IProductFilterParams<T>;
   sortingParams: { [key: string]: string };
   skipParam: number;
+}
+
+export interface IUserRepository {
+  createUser(userData: IUserRegistrationParams): Promise<string | null>;
+  getUserByUsername(username: string): Promise<IUserAccount | null>;
+  updateUserInfo(username: string, newUserInfo: IUserUpdateProfileParams): Promise<IUserAccount | null>;
+  updateUserPassword(username: string, newPassword: string): Promise<boolean>;
+}
+
+export interface IUserRegistrationParams {
+  username: string;
+  password: string;
+}
+
+export interface IUserUpdateProfileParams {
+  firstname?: string;
+  lastname?: string;
+}
+
+export interface IUserAccount {
+  _id?: ObjectId | number;
+  username: string;
+  password: string;
+  firstname?: string;
+  lastname?: string;
 }
