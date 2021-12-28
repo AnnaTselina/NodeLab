@@ -102,7 +102,7 @@ export const UsersRouter = (router: Router): void => {
   );
 
   //for deleting refresh token
-  router.delete(
+  router.post(
     '/logout',
     validationRefreshTokenSchema,
     validationResultMiddleware,

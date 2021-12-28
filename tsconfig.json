@@ -7,6 +7,7 @@
     "rootDir": "./src",
     "isolatedModules": false,
     "removeComments": true,
+    "resolveJsonModule": true,
     /* Strict Type-Checking Options */
     "strict": true,
     "noFallthroughCasesInSwitch": true,
@@ -27,8 +28,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-
+    "emitDecoratorMetadata": true
   },
   "include": ["modules.d.ts", "src"]
 }
