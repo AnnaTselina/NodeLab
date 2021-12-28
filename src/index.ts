@@ -7,11 +7,16 @@ import { CategoriesRouter } from './routes/categories.route';
 import { UsersRouter } from './routes/users.route';
 import { loggerMiddleware } from './middlewares/logger/logger.middleware';
 import { errorHandlerMiddleware } from './middlewares/errorHandler/errorHadler.middleware';
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from './documentation/swagger.json';
 
 const app: Application = express();
 app.use(express.json());
 const port = process.env['PORT'] ?? 3000;
 const router = express.Router();
+
+router.use('/api-docs', swaggerUi.serve);
+router.get('/api-docs', swaggerUi.setup(swaggerDocument));
 
 app.use(loggerMiddleware);
 
