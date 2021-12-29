@@ -10,6 +10,11 @@ class ProductTypegooseRepository {
     const data = await ProductModel.find(filterParams).skip(skipParam).limit(pageSize).sort(sortingParams);
     return data;
   }
+
+  async getProductById(id: string) {
+    const data = await ProductModel.findById(id);
+    return data ? data : null;
+  }
 }
 
 export default ProductTypegooseRepository;

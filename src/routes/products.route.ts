@@ -5,8 +5,10 @@ import validationResultMiddleware from '../middlewares/validationResultHandler/v
 import { validateNewRatingSchema, validationProductsSchema } from '../validators/validationSchemas';
 import authenticateTokenMiddleware from '../middlewares/authorization/authorization.middleware';
 import checkUserRoleMiddleware from '../middlewares/checkUserRole/checkUserRole.middleware';
+import { UserService } from '../service/user.service';
 
 const productService = new ProductsService();
+const userService = new UserService();
 
 export const ProductsRouter = (router: Router): void => {
   router.get(
@@ -34,8 +36,26 @@ export const ProductsRouter = (router: Router): void => {
     checkUserRoleMiddleware,
     validateNewRatingSchema,
     validationResultMiddleware,
-    (req: Request, resp: Response, next: NextFunction) => {
-      resp.status(200).json({ result: 'success' });
+    async (req: Request, resp: Response, next: NextFunction) => {
+      const { id } = req.params;
+      //const {rating} = req.body;
+      let user = req.user;
+      try {
+        const product = await productService.getProductById(id);
+        if (!product) {
+          throw new HttpException(404, 'Product with provided id not found.');
+        }
+        if (!user._id) {
+          const userInfo = await userService.getUserByUsername(user.username);
+          if (userInfo) {
+            user = userInfo;
+          } else {
+            throw new HttpException(404, 'User not found.');
+          }
+        }
+      } catch (err) {
+        next(err);
+      }
     }
   );
 };

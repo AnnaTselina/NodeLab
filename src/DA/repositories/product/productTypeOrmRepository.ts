@@ -14,6 +14,11 @@ class ProductTypeOrmRepository implements IProductRepository {
     });
     return data;
   }
+
+  async getProductById(id: string) {
+    const data = await ProductEntity.findOne(id);
+    return data ? data : null;
+  }
 }
 
 export default ProductTypeOrmRepository;

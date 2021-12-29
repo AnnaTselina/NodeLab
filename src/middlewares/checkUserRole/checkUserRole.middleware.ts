@@ -10,6 +10,7 @@ const checkUserRoleMiddleware = async (req: Request, resp: Response, next: NextF
     const userFullInfo = await userService.getUserByUsername(user.username);
     if (userFullInfo) {
       if (userFullInfo.role === 'buyer') {
+        req.user = { ...req.user, ...userFullInfo };
         next();
       } else {
         throw new HttpException(403, 'Only buyers have access to requested endpoint.');

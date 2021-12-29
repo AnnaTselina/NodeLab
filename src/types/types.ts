@@ -37,6 +37,7 @@ export interface ICategorySearchParams {
 
 export interface IProductRepository {
   getProducts: (queryParams: IProductSearchParams) => Promise<IProduct[]>;
+  getProductById: (id: string) => Promise<IProduct | null>;
 }
 
 export interface ICategoryRepository {

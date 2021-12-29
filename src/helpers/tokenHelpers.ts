@@ -4,7 +4,7 @@ const refreshTokensList: { [key: string]: string } = {};
 
 export const generateAccessToken = (username: string) => {
   if (process.env['ACCESS_TOKEN_SECRET']) {
-    const accessToken = jwt.sign({ username }, process.env['ACCESS_TOKEN_SECRET'], { expiresIn: '10m' });
+    const accessToken = jwt.sign({ username }, process.env['ACCESS_TOKEN_SECRET'], { expiresIn: '30m' });
     return accessToken;
   } else {
     return null;
