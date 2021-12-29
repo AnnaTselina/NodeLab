@@ -2,7 +2,7 @@ import { Router, Response, Request, NextFunction } from 'express';
 import { ProductsService } from '../service/products.service';
 import HttpException from '../exceptions/exceptions';
 import validationResultMiddleware from '../middlewares/validationResultHandler/validationResultHandler.middleware';
-import { validationProductsSchema } from '../validators/validationSchemas';
+import { validateNewRatingSchema, validationProductsSchema } from '../validators/validationSchemas';
 
 const productService = new ProductsService();
 
@@ -23,6 +23,17 @@ export const ProductsRouter = (router: Router): void => {
       } catch (err) {
         next(err);
       }
+    }
+  );
+
+  //TODO: add middleware for authentication
+  //TODO: add middleware for checking role
+  router.post(
+    '/products/:id/rate',
+    validateNewRatingSchema,
+    validationResultMiddleware,
+    (req: Request, resp: Response, next: NextFunction) => {
+      console.log(req.body);
     }
   );
 };

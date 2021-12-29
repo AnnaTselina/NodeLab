@@ -12,8 +12,8 @@ export const validationProductsSchema = checkSchema(
     minRating: {
       optional: true,
       isFloat: {
-        options: { min: 0, max: 5 },
-        errorMessage: `Value for 'minRating' must be a floating point number between 0 and 5.`
+        options: { min: 0, max: 10 },
+        errorMessage: `Value for 'minRating' must be a floating point number between 0 and 10.`
       }
     },
     price: {
@@ -178,3 +178,22 @@ export const validateUpdatePasswordSchema = checkSchema(
   },
   ['body']
 );
+
+export const validateNewRatingSchema = checkSchema({
+  rating: {
+    exists: {
+      errorMessage: 'Rating must be provided.',
+      bail: true
+    },
+    isInt: {
+      options: {
+        min: 0,
+        max: 10
+      },
+      errorMessage: 'Rating must be integer between 0 and 10.'
+    }
+  },
+  comment: {
+    optional: true
+  }
+});
