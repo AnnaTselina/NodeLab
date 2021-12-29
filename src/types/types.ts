@@ -89,4 +89,5 @@ export interface IUserAccount {
   password: string;
   firstname?: string;
   lastname?: string;
+  role?: string;
 }

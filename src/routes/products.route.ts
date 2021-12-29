@@ -3,6 +3,8 @@ import { ProductsService } from '../service/products.service';
 import HttpException from '../exceptions/exceptions';
 import validationResultMiddleware from '../middlewares/validationResultHandler/validationResultHandler.middleware';
 import { validateNewRatingSchema, validationProductsSchema } from '../validators/validationSchemas';
+import authenticateTokenMiddleware from '../middlewares/authorization/authorization.middleware';
+import checkUserRoleMiddleware from '../middlewares/checkUserRole/checkUserRole.middleware';
 
 const productService = new ProductsService();
 
@@ -26,14 +28,14 @@ export const ProductsRouter = (router: Router): void => {
     }
   );
 
-  //TODO: add middleware for authentication
-  //TODO: add middleware for checking role
   router.post(
     '/products/:id/rate',
+    authenticateTokenMiddleware,
+    checkUserRoleMiddleware,
     validateNewRatingSchema,
     validationResultMiddleware,
     (req: Request, resp: Response, next: NextFunction) => {
-      console.log(req.body);
+      resp.status(200).json({ result: 'success' });
     }
   );
 };

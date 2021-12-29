@@ -4,6 +4,9 @@ const PRICE_REGEX = /^((0|[1-9]\d*)(\.\d+)?)?:((0|[1-9]\d*)(\.\d+)?)?$/;
 const SORTBY_REGEX = /(displayName|price|totalRating|createdAt)+:(asc|desc)+/;
 const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
 
+const ROLE_BUYER = 'buyer';
+const ROLE_ADMIN = 'admin';
+
 export const validationProductsSchema = checkSchema(
   {
     displayName: {
@@ -110,6 +113,19 @@ export const validationUserRegistrateSchema = checkSchema(
     },
     lastname: {
       optional: true
+    },
+    role: {
+      optional: true,
+      custom: {
+        options: (value) => {
+          if (value === ROLE_BUYER || value === ROLE_ADMIN) {
+            return true;
+          } else {
+            return false;
+          }
+        },
+        errorMessage: `Accepted roles: '${ROLE_BUYER}', '${ROLE_ADMIN}'.`
+      }
     }
   },
   ['body']
