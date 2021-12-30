@@ -11,6 +11,25 @@ class UserRatingsTypeormRepository {
 
     return result ? true : false;
   }
+
+  async updateRating(userId: string, productId: string, rating: string) {
+    const userRating = await UserRatingsEntity.findOne({ where: { userId, productId } });
+    if (userRating) {
+      userRating.rating = rating;
+      const result = await userRating.save();
+      return result ? true : false;
+    } else {
+      return false;
+    }
+  }
+
+  async getUserRatingByProductId(userId: string, productId: string) {
+    const result = await UserRatingsEntity.findOne({
+      where: { userId, productId }
+    });
+
+    return result ? result : null;
+  }
 }
 
 export default UserRatingsTypeormRepository;

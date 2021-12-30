@@ -95,4 +95,14 @@ export interface IUserAccount {
 
 export interface IUserRatingsRepository {
   addRating(userId: string, productId: string, rating: string): Promise<boolean>;
+  getUserRatingByProductId(userId: string, productId: string): Promise<IUserRating | null>;
+  updateRating(userId: string, productId: string, rating: string): Promise<boolean>;
+}
+
+export interface IUserRating {
+  _id?: number;
+  userId: number;
+  productId: string;
+  rating: string;
+  comment?: string;
 }
