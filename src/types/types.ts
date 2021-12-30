@@ -92,3 +92,7 @@ export interface IUserAccount {
   lastname?: string;
   role?: string;
 }
+
+export interface IUserRatingsRepository {
+  addRating(): Promise<null>;
+}

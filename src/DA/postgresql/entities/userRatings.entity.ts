@@ -13,4 +13,7 @@ export class UserRatings extends BaseEntity {
 
   @Column()
   rating!: number;
+
+  @Column()
+  comment?: string;
 }
