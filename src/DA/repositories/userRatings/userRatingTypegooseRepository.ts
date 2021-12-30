@@ -1,6 +1,6 @@
 class UserRatingsTypegooseRepository {
-  async addRating() {
-    return null;
+  async addRating(userId: string, productId: string, rating: string) {
+    return false;
   }
 }
 

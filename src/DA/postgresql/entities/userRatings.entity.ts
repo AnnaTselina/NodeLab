@@ -1,7 +1,7 @@
 import { BaseEntity, Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('userRatings')
-export class UserRatings extends BaseEntity {
+export class UserRatingsEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   _id?: number;
 
@@ -9,11 +9,11 @@ export class UserRatings extends BaseEntity {
   userId!: number;
 
   @Column()
-  productId!: number;
+  productId!: string;
 
   @Column()
-  rating!: number;
+  rating!: string;
 
-  @Column()
+  @Column({ nullable: true })
   comment?: string;
 }

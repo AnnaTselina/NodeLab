@@ -6,9 +6,11 @@ import { validateNewRatingSchema, validationProductsSchema } from '../validators
 import authenticateTokenMiddleware from '../middlewares/authorization/authorization.middleware';
 import checkUserRoleMiddleware from '../middlewares/checkUserRole/checkUserRole.middleware';
 import { UserService } from '../service/user.service';
+import { UserRatingsService } from '../service/userRatings.service';
 
 const productService = new ProductsService();
 const userService = new UserService();
+const userRatingsService = new UserRatingsService();
 
 export const ProductsRouter = (router: Router): void => {
   router.get(
@@ -38,7 +40,7 @@ export const ProductsRouter = (router: Router): void => {
     validationResultMiddleware,
     async (req: Request, resp: Response, next: NextFunction) => {
       const { id } = req.params;
-      //const {rating} = req.body;
+      const { rating } = req.body;
       let user = req.user;
       try {
         const product = await productService.getProductById(id);
@@ -52,6 +54,12 @@ export const ProductsRouter = (router: Router): void => {
           } else {
             throw new HttpException(404, 'User not found.');
           }
+        }
+        const addRatingResult = await userRatingsService.addRating(user._id, id, rating);
+        if (addRatingResult) {
+          resp.status(201).json({ message: 'Rating for product successfully added.' });
+        } else {
+          throw new HttpException(500, 'An error occured trying to add rating.');
         }
       } catch (err) {
         next(err);

@@ -94,5 +94,5 @@ export interface IUserAccount {
 }
 
 export interface IUserRatingsRepository {
-  addRating(): Promise<null>;
+  addRating(userId: string, productId: string, rating: string): Promise<boolean>;
 }
