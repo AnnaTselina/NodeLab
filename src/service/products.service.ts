@@ -11,4 +11,9 @@ export class ProductsService {
     const data = await ProductRepository.getProductById(id);
     return data;
   }
+
+  public async updateProductTotalRating(id: string, newRating: number) {
+    const data = await ProductRepository.updateProductTotalRating(id, newRating);
+    return data;
+  }
 }

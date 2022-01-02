@@ -10,6 +10,10 @@ class UserRatingsTypegooseRepository {
   async updateRating(userId: string, productId: string, rating: string) {
     return false;
   }
+
+  async countAverageProductRating(productId: string) {
+    return null;
+  }
 }
 
 export default UserRatingsTypegooseRepository;

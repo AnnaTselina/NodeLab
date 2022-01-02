@@ -15,6 +15,10 @@ class ProductTypegooseRepository {
     const data = await ProductModel.findById(id);
     return data ? data : null;
   }
+
+  async updateProductTotalRating(id: string, newRating: number) {
+    return false;
+  }
 }
 
 export default ProductTypegooseRepository;

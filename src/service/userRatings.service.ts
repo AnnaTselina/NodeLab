@@ -14,4 +14,9 @@ export class UserRatingsService {
     const data = await UserRatingsRepository.updateRating(userId, productId, rating);
     return data;
   }
+
+  public async countAverageProductRating(productId: string) {
+    const data = await UserRatingsRepository.countAverageProductRating(productId);
+    return data;
+  }
 }

@@ -55,21 +55,26 @@ export const ProductsRouter = (router: Router): void => {
             throw new HttpException(404, 'User not found.');
           }
         }
+
         const existingUserRating = await userRatingsService.getUserRatingByProductId(user._id, id);
-        if (existingUserRating) {
-          const updateRatingResult = await userRatingsService.updateRating(user._id, id, rating);
-          if (updateRatingResult) {
-            resp.status(200).json({ message: 'Rating for product successfully updated.' });
-          } else {
-            throw new HttpException(500, 'An error occured trying to update rating.');
-          }
+        const putRatingResult = existingUserRating
+          ? await userRatingsService.updateRating(user._id, id, rating)
+          : await userRatingsService.addRating(user._id, id, rating);
+
+        const newProductTotalRating = await userRatingsService.countAverageProductRating(id);
+        const updateTotalRatingResult = await productService.updateProductTotalRating(
+          id,
+          Number(newProductTotalRating)
+        );
+
+        if (putRatingResult && updateTotalRatingResult) {
+          resp
+            .status(existingUserRating ? 200 : 201)
+            .json({ result: `Rating for products successfully ${existingUserRating ? 'updated' : 'added'}.` });
         } else {
-          const addRatingResult = await userRatingsService.addRating(user._id, id, rating);
-          if (addRatingResult) {
-            resp.status(201).json({ message: 'Rating for product successfully added.' });
-          } else {
-            throw new HttpException(500, 'An error occured trying to add rating.');
-          }
+          resp
+            .status(500)
+            .json({ result: `An error occured trying to ${existingUserRating ? 'update' : 'add'} rating.` });
         }
       } catch (err) {
         next(err);
