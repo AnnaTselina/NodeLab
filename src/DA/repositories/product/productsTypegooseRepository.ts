@@ -17,7 +17,8 @@ class ProductTypegooseRepository {
   }
 
   async updateProductTotalRating(id: string, newRating: number) {
-    return false;
+    const data = await ProductModel.findByIdAndUpdate({ _id: id }, { totalRating: newRating });
+    return data ? true : false;
   }
 }
 

@@ -70,7 +70,7 @@ export const ProductsRouter = (router: Router): void => {
         if (putRatingResult && updateTotalRatingResult) {
           resp
             .status(existingUserRating ? 200 : 201)
-            .json({ result: `Rating for products successfully ${existingUserRating ? 'updated' : 'added'}.` });
+            .json({ result: `Rating for product successfully ${existingUserRating ? 'updated' : 'added'}.` });
         } else {
           resp
             .status(500)

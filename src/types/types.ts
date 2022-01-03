@@ -103,8 +103,8 @@ export interface IUserRatingsRepository {
 
 export interface IUserRating {
   _id?: number;
-  userId: number;
-  productId: string;
+  userId: number | ObjectId;
+  productId?: string;
   rating: number;
   comment?: string;
 }

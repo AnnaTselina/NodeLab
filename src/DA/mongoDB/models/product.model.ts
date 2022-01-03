@@ -1,4 +1,5 @@
 import { prop, getModelForClass, Ref } from '@typegoose/typegoose';
+import { ObjectId } from 'mongoose';
 import { CategoryClass } from './category.model';
 
 export class ProductClass {
@@ -16,6 +17,9 @@ export class ProductClass {
 
   @prop({ required: true, index: true })
   public price!: number;
+
+  @prop({ default: [] })
+  public ratings!: Array<{ userId: ObjectId; rating: number; comment: string }>;
 }
 
 export const ProductModel = getModelForClass(ProductClass);
