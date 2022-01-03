@@ -40,7 +40,7 @@ export const ProductsRouter = (router: Router): void => {
     validationResultMiddleware,
     async (req: Request, resp: Response, next: NextFunction) => {
       const { id } = req.params;
-      const { rating } = req.body;
+      const { rating, comment } = req.body;
       let user = req.user;
       try {
         const product = await productService.getProductById(id);
@@ -58,8 +58,8 @@ export const ProductsRouter = (router: Router): void => {
 
         const existingUserRating = await userRatingsService.getUserRatingByProductId(user._id, id);
         const putRatingResult = existingUserRating
-          ? await userRatingsService.updateRating(user._id, id, rating)
-          : await userRatingsService.addRating(user._id, id, rating);
+          ? await userRatingsService.updateRating(user._id, id, rating, comment)
+          : await userRatingsService.addRating(user._id, id, rating, comment);
 
         const newProductTotalRating = await userRatingsService.countAverageProductRating(id);
         const updateTotalRatingResult = await productService.updateProductTotalRating(

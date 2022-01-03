@@ -2,22 +2,25 @@ import { UserRatingsEntity } from '../../postgresql/entities/userRatings.entity'
 import { getManager } from 'typeorm';
 
 class UserRatingsTypeormRepository {
-  async addRating(userId: string, productId: string, rating: string) {
+  async addRating(userId: string, productId: string, rating: string, comment?: string) {
     const query = UserRatingsEntity.createQueryBuilder()
       .insert()
       .into('userratings')
-      .values({ userId, productId, rating });
+      .values({ userId, productId, rating, comment });
 
     const result = await query.execute();
 
     return result ? true : false;
   }
 
-  async updateRating(userId: string, productId: string, rating: string) {
+  async updateRating(userId: string, productId: string, rating: string, comment?: string) {
     const userRating = await UserRatingsEntity.findOne({ where: { userId, productId } });
 
     if (userRating) {
       userRating.rating = Number(rating);
+      if (comment) {
+        userRating.comment = comment;
+      }
       const result = await userRating.save();
       return result ? true : false;
     } else {

@@ -3,14 +3,14 @@ import { ProductModel } from '../../mongoDB/models/product.model';
 import mongoose from 'mongoose';
 
 class UserRatingsTypegooseRepository {
-  async addRating(userId: string, productId: string, rating: string) {
+  async addRating(userId: string, productId: string, rating: string, comment?: string) {
     const data = await ProductModel.findByIdAndUpdate(
       {
         _id: productId
       },
       {
         $push: {
-          ratings: { userId, rating: Number(rating), comment: '' }
+          ratings: { userId, rating: Number(rating), comment: comment || '' }
         }
       }
     );
@@ -41,7 +41,14 @@ class UserRatingsTypegooseRepository {
     return data ? data.ratings[0] : null;
   }
 
-  async updateRating(userId: string, productId: string, rating: string) {
+  async updateRating(userId: string, productId: string, rating: string, comment?: string) {
+    const updateBlock: { 'ratings.$.rating': number; 'ratings.$.comment'?: string } = {
+      'ratings.$.rating': Number(rating)
+    };
+
+    if (comment) {
+      updateBlock['ratings.$.comment'] = comment;
+    }
     const data = await ProductModel.findOneAndUpdate(
       {
         _id: productId,
@@ -52,9 +59,7 @@ class UserRatingsTypegooseRepository {
         }
       },
       {
-        $set: {
-          'ratings.$.rating': Number(rating)
-        }
+        $set: updateBlock
       }
     );
     return data ? true : false;
