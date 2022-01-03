@@ -9,7 +9,7 @@ export class UserRatingsEntity extends BaseEntity {
   userId!: number;
 
   @Column()
-  productId!: string;
+  productId!: number;
 
   @Column()
   rating!: number;

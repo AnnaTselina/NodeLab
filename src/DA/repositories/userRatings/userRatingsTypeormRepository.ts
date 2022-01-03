@@ -6,7 +6,7 @@ class UserRatingsTypeormRepository {
     const query = UserRatingsEntity.createQueryBuilder()
       .insert()
       .into('userratings')
-      .values({ userId, productId, rating: Number(rating) });
+      .values({ userId, productId, rating });
 
     const result = await query.execute();
 
