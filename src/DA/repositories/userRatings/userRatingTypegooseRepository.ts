@@ -10,7 +10,7 @@ class UserRatingsTypegooseRepository {
       },
       {
         $push: {
-          ratings: { userId, rating, comment: '' }
+          ratings: { userId, rating: Number(rating), comment: '' }
         }
       }
     );
@@ -53,7 +53,7 @@ class UserRatingsTypegooseRepository {
       },
       {
         $set: {
-          'ratings.$.rating': rating
+          'ratings.$.rating': Number(rating)
         }
       }
     );

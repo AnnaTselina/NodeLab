@@ -97,6 +97,63 @@
         }
       }
     },
+    "/products/{id}/rate": {
+      "post": {
+        "tags": ["products"],
+        "summary": "Rate product",
+        "description": "Add or update existing product rating of user by productId.",
+        "operationId": "updateProductRating",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of product",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "New rating value and optional comment.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "rating": {
+                    "type": "number"
+                  },
+                  "comment": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Rating for product successfully updated."
+          },
+          "201": {
+            "description": "Rating for product successfully added."
+          },
+          "404": {
+            "description": "User or product with provided id not found."
+          },
+          "500": {
+            "description": "An error occured trying to ${existingUserRating update/add rating."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/categories": {
       "get": {
         "tags": ["categories"],
