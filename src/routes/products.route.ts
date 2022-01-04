@@ -41,29 +41,11 @@ export const ProductsRouter = (router: Router): void => {
       const { rating, comment } = req.body;
       let user = req.user;
       try {
-        const product = await productService.getProductById(id);
-        if (!product) {
-          throw new HttpException(404, 'Product with provided id not found.');
-        }
-        const existingUserRating = await userRatingsService.getUserRatingByProductId(user._id, id);
-        const putRatingResult = existingUserRating
-          ? await userRatingsService.updateRating(user._id, id, rating, comment)
-          : await userRatingsService.addRating(user._id, id, rating, comment);
-
-        const newProductTotalRating = await userRatingsService.countAverageProductRating(id);
-        const updateTotalRatingResult = await productService.updateProductTotalRating(
-          id,
-          Number(newProductTotalRating)
-        );
-
-        if (putRatingResult && updateTotalRatingResult) {
-          resp
-            .status(existingUserRating ? 200 : 201)
-            .json({ result: `Rating for product successfully ${existingUserRating ? 'updated' : 'added'}.` });
+        const rateResult = await userRatingsService.rateProduct(user._id, id, rating, comment);
+        if (rateResult) {
+          resp.status(200).json({ result: 'Product rating successfully updated.' });
         } else {
-          resp
-            .status(500)
-            .json({ result: `An error occured trying to ${existingUserRating ? 'update' : 'add'} rating.` });
+          throw new HttpException(500, 'An error occured trying to update product rating.');
         }
       } catch (err) {
         next(err);

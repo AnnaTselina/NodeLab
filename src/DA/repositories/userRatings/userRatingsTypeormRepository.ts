@@ -2,7 +2,7 @@ import { UserRatingsEntity } from '../../postgresql/entities/userRatings.entity'
 import { getManager } from 'typeorm';
 
 class UserRatingsTypeormRepository {
-  async addRating(userId: string, productId: string, rating: string, comment?: string) {
+  async addRating(userId: string, productId: string, rating: number, comment?: string) {
     const query = UserRatingsEntity.createQueryBuilder()
       .insert()
       .into('userratings')
@@ -13,11 +13,11 @@ class UserRatingsTypeormRepository {
     return result ? true : false;
   }
 
-  async updateRating(userId: string, productId: string, rating: string, comment?: string) {
+  async updateRating(userId: string, productId: string, rating: number, comment?: string) {
     const userRating = await UserRatingsEntity.findOne({ where: { userId, productId } });
 
     if (userRating) {
-      userRating.rating = Number(rating);
+      userRating.rating = rating;
       if (comment) {
         userRating.comment = comment;
       }
@@ -39,7 +39,7 @@ class UserRatingsTypeormRepository {
   async countAverageProductRating(productId: string) {
     const entityManager = getManager();
     const average = await entityManager.query(`select AVG(rating) from userratings WHERE "productId"='${productId}'`);
-    return average ? average[0].avg : null;
+    return average ? Number(average[0].avg) : null;
   }
 }
 
