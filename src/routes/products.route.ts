@@ -5,11 +5,9 @@ import validationResultMiddleware from '../middlewares/validationResultHandler/v
 import { validateNewRatingSchema, validationProductsSchema } from '../validators/validationSchemas';
 import authenticateTokenMiddleware from '../middlewares/authorization/authorization.middleware';
 import checkUserRoleMiddleware from '../middlewares/checkUserRole/checkUserRole.middleware';
-import { UserService } from '../service/user.service';
 import { UserRatingsService } from '../service/userRatings.service';
 
 const productService = new ProductsService();
-const userService = new UserService();
 const userRatingsService = new UserRatingsService();
 
 export const ProductsRouter = (router: Router): void => {
@@ -47,15 +45,6 @@ export const ProductsRouter = (router: Router): void => {
         if (!product) {
           throw new HttpException(404, 'Product with provided id not found.');
         }
-        if (!user._id) {
-          const userInfo = await userService.getUserByUsername(user.username);
-          if (userInfo) {
-            user = userInfo;
-          } else {
-            throw new HttpException(404, 'User not found.');
-          }
-        }
-
         const existingUserRating = await userRatingsService.getUserRatingByProductId(user._id, id);
         const putRatingResult = existingUserRating
           ? await userRatingsService.updateRating(user._id, id, rating, comment)

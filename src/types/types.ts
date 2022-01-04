@@ -86,7 +86,7 @@ export interface IUserUpdateProfileParams {
 }
 
 export interface IUserAccount {
-  _id?: ObjectId | number;
+  _id: ObjectId | number;
   username: string;
   password: string;
   firstname?: string;
