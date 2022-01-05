@@ -135,16 +135,13 @@
         },
         "responses": {
           "200": {
-            "description": "Rating for product successfully updated."
-          },
-          "201": {
-            "description": "Rating for product successfully added."
+            "description": "Product rating successfully updated."
           },
           "404": {
-            "description": "User or product with provided id not found."
+            "description": "Product with provided id not found."
           },
           "500": {
-            "description": "An error occured trying to ${existingUserRating update/add rating."
+            "description": "An error occured trying to update product rating."
           }
         },
         "security": [
