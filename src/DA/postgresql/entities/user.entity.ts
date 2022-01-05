@@ -14,6 +14,9 @@ export class UserEntity extends BaseEntity {
   @Column({ nullable: true })
   lastname?: string;
 
+  @Column({ default: 'buyer' })
+  role?: string;
+
   @PrimaryGeneratedColumn()
   _id!: number;
 }

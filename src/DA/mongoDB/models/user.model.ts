@@ -12,6 +12,9 @@ export class UserClass {
 
   @prop({ required: false, default: null })
   public lastname?: string;
+
+  @prop({ default: 'buyer' })
+  public role?: string;
 }
 
 export const UserModel = getModelForClass(UserClass);

@@ -6,4 +6,14 @@ export class ProductsService {
     const data = await ProductRepository.getProducts(queryParams);
     return data;
   }
+
+  public async getProductById(id: string) {
+    const data = await ProductRepository.getProductById(id);
+    return data;
+  }
+
+  public async updateProductTotalRating(id: string, newRating: number) {
+    const data = await ProductRepository.updateProductTotalRating(id, newRating);
+    return data;
+  }
 }

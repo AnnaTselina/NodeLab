@@ -4,6 +4,9 @@ const PRICE_REGEX = /^((0|[1-9]\d*)(\.\d+)?)?:((0|[1-9]\d*)(\.\d+)?)?$/;
 const SORTBY_REGEX = /(displayName|price|totalRating|createdAt)+:(asc|desc)+/;
 const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
 
+const ROLE_BUYER = 'buyer';
+const ROLE_ADMIN = 'admin';
+
 export const validationProductsSchema = checkSchema(
   {
     displayName: {
@@ -12,8 +15,8 @@ export const validationProductsSchema = checkSchema(
     minRating: {
       optional: true,
       isFloat: {
-        options: { min: 0, max: 5 },
-        errorMessage: `Value for 'minRating' must be a floating point number between 0 and 5.`
+        options: { min: 0, max: 10 },
+        errorMessage: `Value for 'minRating' must be a floating point number between 0 and 10.`
       }
     },
     price: {
@@ -110,6 +113,19 @@ export const validationUserRegistrateSchema = checkSchema(
     },
     lastname: {
       optional: true
+    },
+    role: {
+      optional: true,
+      custom: {
+        options: (value) => {
+          if (value === ROLE_BUYER || value === ROLE_ADMIN) {
+            return true;
+          } else {
+            return false;
+          }
+        },
+        errorMessage: `Accepted roles: '${ROLE_BUYER}', '${ROLE_ADMIN}'.`
+      }
     }
   },
   ['body']
@@ -178,3 +194,22 @@ export const validateUpdatePasswordSchema = checkSchema(
   },
   ['body']
 );
+
+export const validateNewRatingSchema = checkSchema({
+  rating: {
+    exists: {
+      errorMessage: 'Rating must be provided.',
+      bail: true
+    },
+    isInt: {
+      options: {
+        min: 0,
+        max: 10
+      },
+      errorMessage: 'Rating must be integer between 0 and 10.'
+    }
+  },
+  comment: {
+    optional: true
+  }
+});

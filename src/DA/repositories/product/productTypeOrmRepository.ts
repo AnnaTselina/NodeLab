@@ -14,6 +14,20 @@ class ProductTypeOrmRepository implements IProductRepository {
     });
     return data;
   }
+
+  async getProductById(id: string) {
+    const data = await ProductEntity.findOne(id);
+    return data ? data : null;
+  }
+
+  async updateProductTotalRating(id: string, newRating: number) {
+    const data = await ProductEntity.createQueryBuilder()
+      .update('product')
+      .set({ totalRating: newRating })
+      .where({ _id: id })
+      .execute();
+    return data ? true : false;
+  }
 }
 
 export default ProductTypeOrmRepository;

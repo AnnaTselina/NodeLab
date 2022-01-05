@@ -10,6 +10,16 @@ class ProductTypegooseRepository {
     const data = await ProductModel.find(filterParams).skip(skipParam).limit(pageSize).sort(sortingParams);
     return data;
   }
+
+  async getProductById(id: string) {
+    const data = await ProductModel.findById(id);
+    return data ? data : null;
+  }
+
+  async updateProductTotalRating(id: string, newRating: number) {
+    const data = await ProductModel.findByIdAndUpdate({ _id: id }, { totalRating: newRating });
+    return data ? true : false;
+  }
 }
 
 export default ProductTypegooseRepository;

@@ -1,19 +1,20 @@
 import jwt from 'jsonwebtoken';
+import { ObjectId } from '../types/types';
 
 const refreshTokensList: { [key: string]: string } = {};
 
-export const generateAccessToken = (username: string) => {
+export const generateAccessToken = (username: string, id: number | ObjectId) => {
   if (process.env['ACCESS_TOKEN_SECRET']) {
-    const accessToken = jwt.sign({ username }, process.env['ACCESS_TOKEN_SECRET'], { expiresIn: '10m' });
+    const accessToken = jwt.sign({ username, _id: id }, process.env['ACCESS_TOKEN_SECRET'], { expiresIn: '30m' });
     return accessToken;
   } else {
     return null;
   }
 };
 
-export const generateRefreshToken = (username: string) => {
+export const generateRefreshToken = (username: string, id: number | ObjectId) => {
   if (process.env['REFRESH_TOKEN_SECRET']) {
-    const refreshToken = jwt.sign({ username }, process.env['REFRESH_TOKEN_SECRET']);
+    const refreshToken = jwt.sign({ username, _id: id }, process.env['REFRESH_TOKEN_SECRET']);
     refreshTokensList[refreshToken] = username;
     return refreshToken;
   } else {

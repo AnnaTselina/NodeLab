@@ -1,6 +1,8 @@
-import { prop, getModelForClass, Ref } from '@typegoose/typegoose';
+import { prop, getModelForClass, Ref, modelOptions, Severity } from '@typegoose/typegoose';
+import { ObjectId } from 'mongoose';
 import { CategoryClass } from './category.model';
 
+@modelOptions({ options: { allowMixed: Severity.ALLOW } })
 export class ProductClass {
   @prop({ required: true, index: { unique: true } })
   public displayName!: string;
@@ -16,6 +18,9 @@ export class ProductClass {
 
   @prop({ required: true, index: true })
   public price!: number;
+
+  @prop({ default: [] })
+  public ratings!: Array<{ userId: ObjectId; rating: number; comment: string }>;
 }
 
 export const ProductModel = getModelForClass(ProductClass);

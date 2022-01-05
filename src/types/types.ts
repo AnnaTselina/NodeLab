@@ -37,6 +37,8 @@ export interface ICategorySearchParams {
 
 export interface IProductRepository {
   getProducts: (queryParams: IProductSearchParams) => Promise<IProduct[]>;
+  getProductById: (id: string) => Promise<IProduct | null>;
+  updateProductTotalRating: (id: string, newRating: number) => Promise<boolean>;
 }
 
 export interface ICategoryRepository {
@@ -84,9 +86,25 @@ export interface IUserUpdateProfileParams {
 }
 
 export interface IUserAccount {
-  _id?: ObjectId | number;
+  _id: ObjectId | number;
   username: string;
   password: string;
   firstname?: string;
   lastname?: string;
+  role?: string;
+}
+
+export interface IUserRatingsRepository {
+  addRating(userId: string, productId: string, rating: number, comment?: string): Promise<boolean>;
+  getUserRatingByProductId(userId: string, productId: string): Promise<IUserRating | null>;
+  updateRating(userId: string, productId: string, rating: number, comment?: string): Promise<boolean>;
+  countAverageProductRating(productId: string): Promise<number | null>;
+}
+
+export interface IUserRating {
+  _id?: number;
+  userId: number | ObjectId;
+  productId?: number;
+  rating: number;
+  comment?: string;
 }

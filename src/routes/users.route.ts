@@ -56,8 +56,8 @@ export const UsersRouter = (router: Router): void => {
         if (user) {
           const passwordMatch = await bcrypt.compare(password, user.password);
           if (passwordMatch) {
-            const accessToken = generateAccessToken(username);
-            const refreshToken = generateRefreshToken(username);
+            const accessToken = generateAccessToken(username, user._id);
+            const refreshToken = generateRefreshToken(username, user._id);
             if (accessToken && refreshToken) {
               resp.status(200).json({ accessToken, refreshToken });
             } else {
@@ -84,7 +84,7 @@ export const UsersRouter = (router: Router): void => {
       try {
         const result = verifyRefreshToken(token);
         if (result) {
-          const newAccessToken = generateAccessToken(result['username']);
+          const newAccessToken = generateAccessToken(result['username'], result['_id']);
           if (newAccessToken) {
             resp.status(200).json({ accessToken: newAccessToken });
           } else {
