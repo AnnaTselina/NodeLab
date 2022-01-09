@@ -4,6 +4,8 @@ import { CategoryEntity } from './entities/category.entity';
 import logger from '../../logger';
 import { UserEntity } from './entities/user.entity';
 import { UserRatingsEntity } from './entities/userRatings.entity';
+import { OrderListEntity } from './entities/orderList.entity';
+import { OrderListProductsEntity } from './entities/orderListProducts.entity';
 
 const host = process.env['HOST'];
 const port = process.env['POSTGRESQL_PORT'];
@@ -20,7 +22,14 @@ const postgreSQLConnect = async () => {
       username,
       password,
       database,
-      entities: [ProductEntity, CategoryEntity, UserEntity, UserRatingsEntity],
+      entities: [
+        ProductEntity,
+        CategoryEntity,
+        UserEntity,
+        UserRatingsEntity,
+        OrderListEntity,
+        OrderListProductsEntity
+      ],
       synchronize: true,
       logging: process.env['NODE_ENV'] === 'dev'
     }).then(
