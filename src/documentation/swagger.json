@@ -692,6 +692,202 @@
           }
         ]
       }
+    },
+    "/order-list": {
+      "post": {
+        "tags": ["orders"],
+        "summary": "Create order list with products",
+        "description": "Create new order list for user with products. Can be accessed by buyers and admins.",
+        "operationId": "createOrderList",
+        "requestBody": {
+          "description": "Provide products array with object having product_id and quantity.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "products": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "product_id": {
+                          "oneOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "number"
+                            }
+                          ]
+                        },
+                        "quantity": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Order list created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Order list id=00 created."
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/OrderList"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Order list for user already exists or products with provided ids do not exist."
+          },
+          "500": {
+            "description": "An error occured trying to create order list."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["orders"],
+        "summary": "Update products in order list",
+        "description": "Replace existent products in order list with the provided ones if order list exists.",
+        "operationId": "updateOrderList",
+        "requestBody": {
+          "description": "Provided order list id and valid products array",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "orderList_id": {
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "number"
+                      }
+                    ]
+                  },
+                  "products": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "product_id": {
+                          "oneOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "number"
+                            }
+                          ]
+                        },
+                        "quantity": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Order list with provided id successfully updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Order list id=00 created."
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/OrderList"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Order list with provided id does not exist or products with provided ids do not exist."
+          },
+          "500": {
+            "description": "An error occured trying to update order list."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/order-list/clear": {
+      "post": {
+        "tags": ["orders"],
+        "summary": "Clear order list",
+        "description": "Remove all products from order listwithout deleting the actual order list",
+        "operationId": "clearOrderList",
+        "requestBody": {
+          "description": "Provide order list id for whick products has to be cleared",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "orderList_id": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Order list with provided id cleared."
+          },
+          "404": {
+            "description": "Order list with provided id does not exist."
+          },
+          "500": {
+            "description": "An error occured trying to clear order list with provided id"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -745,6 +941,35 @@
           },
           "lastname": {
             "type": "string"
+          }
+        }
+      },
+      "OrderList": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "product_id": {
+                  "type": "string"
+                },
+                "quantity": {
+                  "type": "number"
+                }
+              }
+            }
           }
         }
       }
