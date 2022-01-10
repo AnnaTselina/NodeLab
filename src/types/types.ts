@@ -39,6 +39,7 @@ export interface IProductRepository {
   getProducts: (queryParams: IProductSearchParams) => Promise<IProduct[]>;
   getProductById: (id: string) => Promise<IProduct | null>;
   updateProductTotalRating: (id: string, newRating: number) => Promise<boolean>;
+  getProductsByIds: (productsIds: string[]) => Promise<IProduct[] | null>;
 }
 
 export interface ICategoryRepository {
@@ -109,4 +110,18 @@ export interface IUserRating {
   comment?: string;
 }
 
-export interface IOrderListRepository {}
+export interface IOrderListRepository {
+  getOrderListId: (userId: string) => Promise<ObjectId | number | null>;
+  createOrderList: (userId: string) => Promise<ObjectId | number | null>;
+  addProductsToOrderList: <T>(orderListId: T, products: IOrderListProduct[]) => Promise<IOrderListProducts<T> | null>;
+}
+
+export interface IOrderListProduct {
+  product_id: string;
+  quantity: number;
+}
+
+export interface IOrderListProducts<T> {
+  _id: T;
+  products: IOrderListProduct[];
+}

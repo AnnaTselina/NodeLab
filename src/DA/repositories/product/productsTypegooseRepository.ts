@@ -20,6 +20,11 @@ class ProductTypegooseRepository {
     const data = await ProductModel.findByIdAndUpdate({ _id: id }, { totalRating: newRating });
     return data ? true : false;
   }
+
+  async getProductsByIds(productsIds: string[]) {
+    const data = await ProductModel.find().where('_id').in(productsIds);
+    return data ? data : null;
+  }
 }
 
 export default ProductTypegooseRepository;
