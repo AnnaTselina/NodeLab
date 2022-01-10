@@ -213,3 +213,31 @@ export const validateNewRatingSchema = checkSchema({
     optional: true
   }
 });
+
+export const validateOrderListProductsSchema = checkSchema(
+  {
+    products: {
+      isArray: {
+        options: {
+          min: 1
+        },
+        errorMessage: `Products must be in not empty array under 'products' key.`
+      }
+    },
+    'products.*.product_id': {
+      exists: {
+        errorMessage: 'Product information must include product_id.',
+        bail: true
+      }
+    },
+    'products.*.quantity': {
+      exists: {
+        errorMessage: 'Product information must include quantity.'
+      },
+      isInt: {
+        errorMessage: 'Quantity must be integer.'
+      }
+    }
+  },
+  ['body']
+);

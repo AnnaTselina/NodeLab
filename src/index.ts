@@ -9,6 +9,7 @@ import { loggerMiddleware } from './middlewares/logger/logger.middleware';
 import { errorHandlerMiddleware } from './middlewares/errorHandler/errorHadler.middleware';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './documentation/swagger.json';
+import { OrderListsRouter } from './routes/orderLists.route';
 
 const app: Application = express();
 app.use(express.json());
@@ -25,6 +26,7 @@ app.use('/', router);
 ProductsRouter(router);
 CategoriesRouter(router);
 UsersRouter(router);
+OrderListsRouter(router);
 
 app.use(errorHandlerMiddleware);
 
