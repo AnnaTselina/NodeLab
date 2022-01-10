@@ -52,4 +52,19 @@ export class OrderListsService {
 
     return addProductsResult;
   }
+
+  public async clearOrderList(orderListId: string) {
+    //check if provided order list exists
+    const orderListExists = await OrderListRepository.checkIfOrderListExists(orderListId);
+    if (!orderListExists) {
+      throw new HttpException(404, `Order list with provided id=${orderListId} does not exist.`);
+    }
+
+    const orderListCleared = await OrderListRepository.clearOrderList(orderListId);
+    if (!orderListCleared) {
+      throw new HttpException(500, 'An error occured trying to update order list.');
+    }
+
+    return orderListCleared;
+  }
 }

@@ -42,14 +42,32 @@ export const OrderListsRouter = (router: Router): void => {
       try {
         const updateProductsResult = await orderListService.updateOrderList(orderList_id, products);
         if (updateProductsResult) {
-          resp
-            .status(200)
-            .json({
-              message: `Order list id=${updateProductsResult._id} successfully updated.`,
-              result: updateProductsResult
-            });
+          resp.status(200).json({
+            message: `Order list id=${updateProductsResult._id} successfully updated.`,
+            result: updateProductsResult
+          });
         } else {
           throw new HttpException(500, 'An error occured trying to update order list.');
+        }
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
+
+  router.post(
+    '/order-list/clear',
+    authenticateTokenMiddleware,
+    validateOrderListIdSchema,
+    validationResultMiddleware,
+    async (req: Request, resp: Response, next: NextFunction) => {
+      const { orderList_id } = req.body;
+      try {
+        const clearResult = await orderListService.clearOrderList(orderList_id);
+        if (clearResult) {
+          resp.status(200).json({ message: `Order list id=${orderList_id} cleared.` });
+        } else {
+          throw new HttpException(500, `An error occured trying to clear order list id=${orderList_id}`);
         }
       } catch (err) {
         next(err);
