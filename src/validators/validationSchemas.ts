@@ -241,3 +241,14 @@ export const validateOrderListProductsSchema = checkSchema(
   },
   ['body']
 );
+
+export const validateOrderListIdSchema = checkSchema(
+  {
+    orderList_id: {
+      exists: {
+        errorMessage: 'Order list id must be provided.'
+      }
+    }
+  },
+  ['body']
+);

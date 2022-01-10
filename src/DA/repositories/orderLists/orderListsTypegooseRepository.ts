@@ -29,6 +29,24 @@ class OrderListTypegooseRepository {
     );
     return data ? { _id: orderListId, products } : null;
   }
+
+  async checkIfOrderListExists(orderListId: string) {
+    const data = await OrderListModel.findById(orderListId);
+    return data ? true : false;
+  }
+
+  async clearOrderList(orderListId: string) {
+    const data = await OrderListModel.findByIdAndUpdate(
+      { _id: orderListId },
+      {
+        $set: {
+          products: []
+        }
+      },
+      { new: true, fields: 'products' }
+    );
+    return data ? true : false;
+  }
 }
 
 export default OrderListTypegooseRepository;

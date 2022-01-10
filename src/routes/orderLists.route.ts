@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import authenticateTokenMiddleware from '../middlewares/authorization/authorization.middleware';
 import validationResultMiddleware from '../middlewares/validationResultHandler/validationResultHandler.middleware';
-import { validateOrderListProductsSchema } from '../validators/validationSchemas';
+import { validateOrderListProductsSchema, validateOrderListIdSchema } from '../validators/validationSchemas';
 import HttpException from '../exceptions/exceptions';
 import { OrderListsService } from '../service/orderList.service';
 
@@ -24,6 +24,32 @@ export const OrderListsRouter = (router: Router): void => {
             .json({ message: `Order list id=${createOrderListResult._id} created.`, result: createOrderListResult });
         } else {
           throw new HttpException(500, 'An error occured trying to create order list.');
+        }
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
+
+  router.put(
+    '/order-list',
+    authenticateTokenMiddleware,
+    validateOrderListIdSchema,
+    validateOrderListProductsSchema,
+    validationResultMiddleware,
+    async (req: Request, resp: Response, next: NextFunction) => {
+      const { orderList_id, products } = req.body;
+      try {
+        const updateProductsResult = await orderListService.updateOrderList(orderList_id, products);
+        if (updateProductsResult) {
+          resp
+            .status(200)
+            .json({
+              message: `Order list id=${updateProductsResult._id} successfully updated.`,
+              result: updateProductsResult
+            });
+        } else {
+          throw new HttpException(500, 'An error occured trying to update order list.');
         }
       } catch (err) {
         next(err);

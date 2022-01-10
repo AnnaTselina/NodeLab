@@ -114,6 +114,8 @@ export interface IOrderListRepository {
   getOrderListId: (userId: string) => Promise<ObjectId | number | null>;
   createOrderList: (userId: string) => Promise<ObjectId | number | null>;
   addProductsToOrderList: <T>(orderListId: T, products: IOrderListProduct[]) => Promise<IOrderListProducts<T> | null>;
+  checkIfOrderListExists: (orderListId: string) => Promise<boolean>;
+  clearOrderList: (orderListId: string) => Promise<boolean>;
 }
 
 export interface IOrderListProduct {

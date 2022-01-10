@@ -27,4 +27,29 @@ export class OrderListsService {
 
     return addProductsResult;
   }
+
+  public async updateOrderList(orderListId: string, products: IOrderListProduct[]) {
+    //check if provided order list exists
+    const orderListExists = await OrderListRepository.checkIfOrderListExists(orderListId);
+    if (!orderListExists) {
+      throw new HttpException(404, `Order list with provided id=${orderListId} does not exist.`);
+    }
+    //check if provided product ids are valid
+    const productsIds = products.map((product) => {
+      return product.product_id;
+    });
+    const productIdsNotValid = await checkProductIdsValid(productsIds);
+    if (productIdsNotValid.length) {
+      throw new HttpException(404, `Products with ids: '${productIdsNotValid.join(',')}' do not exist.`);
+    }
+
+    const orderListCleared = await OrderListRepository.clearOrderList(orderListId);
+    if (!orderListCleared) {
+      throw new HttpException(500, 'An error occured trying to update order list.');
+    }
+
+    const addProductsResult = await OrderListRepository.addProductsToOrderList(orderListId, products);
+
+    return addProductsResult;
+  }
 }

@@ -31,6 +31,21 @@ class OrderListTypeormRepository {
 
     return result ? { _id: orderListId, products } : null;
   }
+
+  async checkIfOrderListExists(orderListId: string) {
+    const result = await OrderListEntity.findOne(orderListId);
+    return result ? true : false;
+  }
+
+  async clearOrderList(orderListId: string) {
+    const result = await OrderListProductsEntity.createQueryBuilder()
+      .delete()
+      .where({
+        order_list: orderListId
+      })
+      .execute();
+    return result ? true : false;
+  }
 }
 
 export default OrderListTypeormRepository;
