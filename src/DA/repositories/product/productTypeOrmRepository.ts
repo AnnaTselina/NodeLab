@@ -28,6 +28,13 @@ class ProductTypeOrmRepository implements IProductRepository {
       .execute();
     return data ? true : false;
   }
+
+  async getProductsByIds(productsIds: string[]) {
+    const data = await ProductEntity.createQueryBuilder('product')
+      .where('product._id IN (:...productsIds)', { productsIds: productsIds })
+      .getMany();
+    return data ? data : null;
+  }
 }
 
 export default ProductTypeOrmRepository;
