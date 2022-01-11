@@ -10,6 +10,7 @@ import { errorHandlerMiddleware } from './middlewares/errorHandler/errorHadler.m
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './documentation/swagger.json';
 import { OrderListsRouter } from './routes/orderLists.route';
+import { ProductsAdminRouter } from './routes/admin/products.admin.route';
 
 const app: Application = express();
 app.use(express.json());
@@ -27,6 +28,8 @@ ProductsRouter(router);
 CategoriesRouter(router);
 UsersRouter(router);
 OrderListsRouter(router);
+
+ProductsAdminRouter(router);
 
 app.use(errorHandlerMiddleware);
 
