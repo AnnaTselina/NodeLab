@@ -151,6 +151,45 @@
         ]
       }
     },
+    "/admin/products/{id}": {
+      "get": {
+        "tags": ["products"],
+        "summary": "Get product",
+        "description": "Get product with provided id (available for admins only).",
+        "operationId": "getProduct",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of product",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product with provided if found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product with provided id not found."
+          }
+        }
+      }
+    },
     "/categories": {
       "get": {
         "tags": ["categories"],
