@@ -1,6 +1,8 @@
 import { ProductModel } from '../../mongoDB/models/product.model';
 import { IProductSearchParams, IProduct } from '../../../types/types';
 import { parseProductQuerySearchParams } from '../../../helpers/productParamsParser';
+import checkCategoryIdsValid from '../../../helpers/categoryIdsValidation';
+import { CategoryModel } from '../../mongoDB/models/category.model';
 
 class ProductTypegooseRepository {
   async getProducts(queryParams: IProductSearchParams): Promise<IProduct[]> {
@@ -24,6 +26,32 @@ class ProductTypegooseRepository {
   async getProductsByIds(productsIds: string[]) {
     const data = await ProductModel.find().where('_id').in(productsIds);
     return data ? data : null;
+  }
+
+  async getProductByName(displayName: string) {
+    const data = await ProductModel.findOne().where({ displayName });
+    return data ? data : null;
+  }
+
+  async createNewProduct(displayName: string, categoryIds: string[], price: number) {
+    await checkCategoryIdsValid(categoryIds);
+    const data = await ProductModel.create({
+      displayName,
+      createdAt: new Date(),
+      categories: categoryIds,
+      price
+    });
+
+    const updateCategoryWithProductId = await CategoryModel.updateMany(
+      { _id: { $in: categoryIds } },
+      {
+        $push: {
+          products: data._id
+        }
+      }
+    );
+
+    return data && updateCategoryWithProductId ? data : null;
   }
 }
 

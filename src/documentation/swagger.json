@@ -187,7 +187,71 @@
           "404": {
             "description": "Product with provided id not found."
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/admin/products": {
+      "post": {
+        "tags": ["products"],
+        "summary": "Create new product",
+        "description": "Create new product providing displayName, categories and price (available for admins only).",
+        "operationId": "createProduct",
+        "requestBody": {
+          "description": "Provide displayName, categories ids and price of a product. Only product with unique name and valid categories ids accepted.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "displayNmae": {
+                    "type": "string"
+                  },
+                  "categories": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ]
+                    }
+                  },
+                  "price": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "New product successfully created."
+          },
+          "400": {
+            "description": "Product with provided displayName already exists."
+          },
+          "404": {
+            "description": "Categories with provided ids do not exist."
+          },
+          "500": {
+            "description": "An error occurred trying to create new product."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/categories": {

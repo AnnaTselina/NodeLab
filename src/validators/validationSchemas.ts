@@ -252,3 +252,27 @@ export const validateOrderListIdSchema = checkSchema(
   },
   ['body']
 );
+
+export const validateCreateProductSchema = checkSchema(
+  {
+    displayName: {
+      exists: {
+        errorMessage: 'To create a new product, displayName must be provided.'
+      }
+    },
+    categories: {
+      isArray: {
+        options: {
+          min: 1
+        },
+        errorMessage: 'To create a new product, category(ies) must be specified in array.'
+      }
+    },
+    price: {
+      exists: {
+        errorMessage: 'To create a new product, price must be specified.'
+      }
+    }
+  },
+  ['body']
+);

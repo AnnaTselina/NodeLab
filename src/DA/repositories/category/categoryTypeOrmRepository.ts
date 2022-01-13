@@ -31,6 +31,15 @@ class CategoryTypeOrmRepository implements ICategoryRepository {
 
     return data ? data : null;
   }
+
+  async getCategoriesById(categoryIds: string[]) {
+    const data = await CategoryEntity.createQueryBuilder('category')
+      .where('category._id IN (:...categoryIds)', {
+        categoryIds
+      })
+      .getMany();
+    return data ? data : null;
+  }
 }
 
 export default CategoryTypeOrmRepository;

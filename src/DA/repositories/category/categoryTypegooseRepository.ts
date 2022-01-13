@@ -25,6 +25,11 @@ class CategoryTypegooseRepository {
 
     return data ? data : null;
   }
+
+  async getCategoriesById(categoryIds: string[]) {
+    const data = await CategoryModel.find().where('_id').in(categoryIds);
+    return data ? data : null;
+  }
 }
 
 export default CategoryTypegooseRepository;

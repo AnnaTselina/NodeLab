@@ -1,6 +1,5 @@
-import { prop, getModelForClass, Ref, modelOptions, Severity } from '@typegoose/typegoose';
+import { prop, getModelForClass, modelOptions, Severity, mongoose } from '@typegoose/typegoose';
 import { ObjectId } from 'mongoose';
-import { CategoryClass } from './category.model';
 
 @modelOptions({ options: { allowMixed: Severity.ALLOW } })
 export class ProductClass {
@@ -11,9 +10,9 @@ export class ProductClass {
   public createdAt!: Date;
 
   @prop({ required: true, ref: () => 'CategoryClass' })
-  public categories!: Ref<CategoryClass>[];
+  public categories!: mongoose.Types.ObjectId[];
 
-  @prop({ required: true, index: true })
+  @prop({ required: true, index: true, default: 0 })
   public totalRating!: number;
 
   @prop({ required: true, index: true })

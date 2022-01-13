@@ -25,7 +25,7 @@ export class ProductEntity extends BaseEntity {
   createdAt!: Date;
 
   @Index()
-  @Column()
+  @Column({ default: 0 })
   totalRating!: number;
 
   @Index()
