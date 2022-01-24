@@ -4,7 +4,7 @@ import authenticateTokenMiddleware from '../../middlewares/authorization/authori
 import checkUserRoleMiddleware from '../../middlewares/checkUserRole/checkUserRole.middleware';
 import validationResultMiddleware from '../../middlewares/validationResultHandler/validationResultHandler.middleware';
 import { ProductsService } from '../../service/products.service';
-import { validateCreateProductSchema } from '../../validators/validationSchemas';
+import { validateCreateProductSchema, validateUpdateProductSchema } from '../../validators/validationSchemas';
 
 const productService = new ProductsService();
 
@@ -46,6 +46,30 @@ export const ProductsAdminRouter = (router: Router): void => {
           resp.status(201).json({ message: 'New product successfully created.', result: createNewProductResult });
         } else {
           throw new HttpException(500, 'An error occurred trying to create new product.');
+        }
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
+
+  router.patch(
+    '/admin/products/:id',
+    authenticateTokenMiddleware,
+    (req: Request, resp: Response, next: NextFunction) => {
+      checkUserRoleMiddleware(req, resp, next, 'admin');
+    },
+    validateUpdateProductSchema,
+    validationResultMiddleware,
+    async (req: Request, resp: Response, next: NextFunction) => {
+      const { id } = req.params;
+      const { displayName, categories, price } = req.body;
+      try {
+        const updateProductInfoResult = await productService.updateProductInfo(id, displayName, categories, price);
+        if (updateProductInfoResult) {
+          resp.status(200).json({ message: 'Product info successfully updated.', result: updateProductInfoResult });
+        } else {
+          throw new HttpException(500, 'An error occurred trying to update product.');
         }
       } catch (err) {
         next(err);

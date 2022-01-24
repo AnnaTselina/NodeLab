@@ -42,6 +42,12 @@ export interface IProductRepository {
   getProductsByIds: (productsIds: string[]) => Promise<IProduct[] | null>;
   getProductByName: (displayName: string) => Promise<IProduct | null>;
   createNewProduct: (displayName: string, categoryIds: string[], price: number) => Promise<IProduct | null>;
+  updateProductInfo: (
+    id: string,
+    displayName?: string,
+    categoryIds?: string[],
+    price?: number
+  ) => Promise<IProduct | null>;
 }
 
 export interface ICategoryRepository {

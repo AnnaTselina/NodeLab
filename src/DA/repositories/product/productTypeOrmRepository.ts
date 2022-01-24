@@ -61,6 +61,30 @@ class ProductTypeOrmRepository implements IProductRepository {
 
     return data ? data : null;
   }
+
+  async updateProductInfo(id: string, displayName?: string, categoryIds?: string[], price?: number) {
+    const product = await ProductEntity.findOne(id);
+    let result;
+    if (product) {
+      if (displayName) {
+        product.displayName = displayName;
+      }
+      if (price) {
+        product.price = price;
+      }
+      if (categoryIds) {
+        const categories = await CategoryEntity.createQueryBuilder('category')
+          .where('category._id IN (:...categoryIds)', {
+            categoryIds
+          })
+          .getMany();
+        product.categories = categories;
+      }
+      result = await product.save();
+    }
+
+    return result ? result : null;
+  }
 }
 
 export default ProductTypeOrmRepository;

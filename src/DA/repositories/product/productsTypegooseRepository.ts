@@ -53,6 +53,27 @@ class ProductTypegooseRepository {
 
     return data && updateCategoryWithProductId ? data : null;
   }
+
+  async updateProductInfo(id: string, displayName?: string, categoryIds?: string[], price?: number) {
+    const infoToBeUpdated: {
+      displayName?: string;
+      price?: number;
+      $set?: { categories: string[] };
+    } = {};
+    if (displayName) {
+      infoToBeUpdated.displayName = displayName;
+    }
+    if (price) {
+      infoToBeUpdated.price = price;
+    }
+    if (categoryIds) {
+      infoToBeUpdated.$set = { categories: categoryIds };
+    }
+
+    const result = await ProductModel.findOneAndUpdate({ _id: id }, { ...infoToBeUpdated }, { new: true });
+
+    return result ? result : null;
+  }
 }
 
 export default ProductTypegooseRepository;

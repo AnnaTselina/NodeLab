@@ -193,6 +193,71 @@
             "bearerAuth": []
           }
         ]
+      },
+      "patch": {
+        "tags": ["products"],
+        "summary": "Update existing product",
+        "description": "Update displayName, price and/or categories of a product (available for admins only).",
+        "operationId": "updateProduct",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of product",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Provide displayName and/or price and/or categories as not empty array pf categoris ids. Only valid product id and categories ids are accepted.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "displayNmae": {
+                    "type": "string"
+                  },
+                  "categories": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ]
+                    }
+                  },
+                  "price": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Product info successfully updated."
+          },
+          "404": {
+            "description": "Product or categories with provided ids not found."
+          },
+          "500": {
+            "description": "An error occurred trying to update product."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/admin/products": {
