@@ -76,4 +76,25 @@ export const ProductsAdminRouter = (router: Router): void => {
       }
     }
   );
+
+  router.delete(
+    '/admin/products/:id',
+    authenticateTokenMiddleware,
+    (req: Request, resp: Response, next: NextFunction) => {
+      checkUserRoleMiddleware(req, resp, next, 'admin');
+    },
+    async (req: Request, resp: Response, next: NextFunction) => {
+      const { id } = req.params;
+      try {
+        const deleteResult = await productService.deleteProduct(id);
+        if (deleteResult) {
+          resp.status(200).json({ message: `Product with id=${id} successfully deleted.` });
+        } else {
+          throw new HttpException(500, 'An error occured trying to delete product.');
+        }
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
 };

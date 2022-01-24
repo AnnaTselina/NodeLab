@@ -85,6 +85,13 @@ class ProductTypeOrmRepository implements IProductRepository {
 
     return result ? result : null;
   }
+
+  async deleteProductById(id: string) {
+    const product = await ProductEntity.findOne(id);
+    const result = await product?.remove();
+
+    return result ? true : false;
+  }
 }
 
 export default ProductTypeOrmRepository;

@@ -47,4 +47,14 @@ export class ProductsService {
 
     return updateMainInfoResult;
   }
+
+  public async deleteProduct(id: string) {
+    const product = await ProductRepository.getProductById(id);
+    if (!product) {
+      throw new HttpException(404, `Product with id=${id} not found.`);
+    }
+
+    const deleteResult = await ProductRepository.deleteProductById(id);
+    return deleteResult;
+  }
 }

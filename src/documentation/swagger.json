@@ -258,6 +258,39 @@
             "bearerAuth": []
           }
         ]
+      },
+      "delete": {
+        "tags": ["products"],
+        "summary": "Delete existing product",
+        "description": "Delete existing product by providing valid product id (available for admins only).",
+        "operationId": "deleteProduct",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of product",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product with provided id successfully deleted."
+          },
+          "404": {
+            "description": "Product with provided id not found."
+          },
+          "500": {
+            "description": "An error occured trying to delete product."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/admin/products": {

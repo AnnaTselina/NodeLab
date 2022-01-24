@@ -48,6 +48,7 @@ export interface IProductRepository {
     categoryIds?: string[],
     price?: number
   ) => Promise<IProduct | null>;
+  deleteProductById: (id: string) => Promise<boolean>;
 }
 
 export interface ICategoryRepository {

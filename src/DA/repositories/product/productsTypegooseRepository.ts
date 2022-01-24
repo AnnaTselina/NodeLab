@@ -74,6 +74,17 @@ class ProductTypegooseRepository {
 
     return result ? result : null;
   }
+
+  async deleteProductById(id: string) {
+    const resultProductDelete = await ProductModel.findByIdAndDelete(id);
+
+    const updateCategoriesResult = await CategoryModel.updateMany(
+      { _id: { $in: resultProductDelete?.categories } },
+      { $pull: { products: id } }
+    );
+
+    return resultProductDelete && updateCategoriesResult ? true : false;
+  }
 }
 
 export default ProductTypegooseRepository;
