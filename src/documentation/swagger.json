@@ -455,6 +455,38 @@
         }
       }
     },
+    "/admin/categories/{id}": {
+      "get": {
+        "tags": ["categories"],
+        "summary": "Get category specified by id.",
+        "description": "Get category by id (available for admins only).",
+        "operationId": "getCategory",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of category",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category info with provided id returned."
+          },
+          "404": {
+            "description": "Category with provided id not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/register": {
       "post": {
         "tags": ["users"],

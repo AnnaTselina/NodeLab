@@ -11,6 +11,7 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './documentation/swagger.json';
 import { OrderListsRouter } from './routes/orderLists.route';
 import { ProductsAdminRouter } from './routes/admin/products.admin.route';
+import { CategoriesAdminRouter } from './routes/admin/categories.admin.route';
 
 const app: Application = express();
 app.use(express.json());
@@ -30,6 +31,7 @@ UsersRouter(router);
 OrderListsRouter(router);
 
 ProductsAdminRouter(router);
+CategoriesAdminRouter(router);
 
 app.use(errorHandlerMiddleware);
 
