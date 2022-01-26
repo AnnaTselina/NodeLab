@@ -55,6 +55,8 @@ export interface ICategoryRepository {
   getCategories: () => Promise<ICategory[] | null>;
   getCategoryById: (categoryId: string, queryParams: ICategorySearchParams) => Promise<ICategory | null>;
   getCategoriesById: (categoryIds: string[]) => Promise<ICategory[] | null>;
+  getCategoryByName: (displayName: string) => Promise<ICategory | null>;
+  createCategory: (displayName: string, productIds?: string[]) => Promise<ICategory | null>;
 }
 
 export interface IProductFilterParamsMongo {

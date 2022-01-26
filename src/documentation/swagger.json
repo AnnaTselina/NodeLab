@@ -487,6 +487,62 @@
         ]
       }
     },
+    "/admin/categories": {
+      "post": {
+        "tags": ["categories"],
+        "summary": "Create new category",
+        "description": "Create new category specifying name and products (available for admins only).",
+        "operationId": "createCategory",
+        "requestBody": {
+          "description": "Provide displayName, product ids of a category. Only category with unique name and valid product ids accepted.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "displayNmae": {
+                    "type": "string"
+                  },
+                  "products": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "New category successfully created and returned as a result"
+          },
+          "400": {
+            "description": "Category with provided name already exists."
+          },
+          "404": {
+            "description": "Products with provided ids not found."
+          },
+          "500": {
+            "description": "An error occured trying to create new category."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/register": {
       "post": {
         "tags": ["users"],

@@ -14,10 +14,8 @@ export class OrderListsService {
     const productsIds = products.map((product) => {
       return product.product_id;
     });
-    const productIdsNotValid = await checkProductIdsValid(productsIds);
-    if (productIdsNotValid.length) {
-      throw new HttpException(404, `Products with ids: '${productIdsNotValid.join(',')}' do not exist.`);
-    }
+    await checkProductIdsValid(productsIds);
+
     const createOrderListResult = await OrderListRepository.createOrderList(userId);
     if (!createOrderListResult) {
       throw new HttpException(500, 'An error occured trying to create order list.');
@@ -38,10 +36,7 @@ export class OrderListsService {
     const productsIds = products.map((product) => {
       return product.product_id;
     });
-    const productIdsNotValid = await checkProductIdsValid(productsIds);
-    if (productIdsNotValid.length) {
-      throw new HttpException(404, `Products with ids: '${productIdsNotValid.join(',')}' do not exist.`);
-    }
+    await checkProductIdsValid(productsIds);
 
     const orderListCleared = await OrderListRepository.clearOrderList(orderListId);
     if (!orderListCleared) {

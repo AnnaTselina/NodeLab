@@ -325,3 +325,24 @@ export const validateUpdateProductSchema = checkSchema(
   },
   ['body']
 );
+
+export const validateCreateCategorySchema = checkSchema(
+  {
+    displayName: {
+      exists: {
+        errorMessage: 'To create a new category, displayName must be provided.'
+      },
+      notEmpty: true
+    },
+    products: {
+      optional: true,
+      isArray: {
+        options: {
+          min: 1
+        },
+        errorMessage: 'Products array must be not empty. Add products ids or remove property.'
+      }
+    }
+  },
+  ['body']
+);

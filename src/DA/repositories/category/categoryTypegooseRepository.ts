@@ -1,7 +1,8 @@
 import { ICategorySearchParams } from './../../../types/types';
 import { CategoryModel } from '../../mongoDB/models/category.model';
-import { ProductClass } from '../../mongoDB/models/product.model';
+import { ProductClass, ProductModel } from '../../mongoDB/models/product.model';
 import { ICategory } from '../../../types/types';
+import checkProductIdsValid from '../../../helpers/productIdsValidation';
 
 class CategoryTypegooseRepository {
   async getCategories(): Promise<ICategory[] | null> {
@@ -29,6 +30,35 @@ class CategoryTypegooseRepository {
   async getCategoriesById(categoryIds: string[]) {
     const data = await CategoryModel.find().where('_id').in(categoryIds);
     return data ? data : null;
+  }
+
+  async getCategoryByName(displayName: string) {
+    const data = await CategoryModel.findOne({ displayName });
+    return data ? data : null;
+  }
+
+  async createCategory(displayName: string, productIds?: string[]) {
+    const category: { displayName: string; createdAt: Date; products?: string[] } = {
+      displayName,
+      createdAt: new Date()
+    };
+    if (productIds) {
+      await checkProductIdsValid(productIds);
+      category.products = productIds;
+    }
+    const data = await CategoryModel.create(category);
+    const result = await data.save();
+
+    const updateProductsWithNewCategory = await ProductModel.updateMany(
+      { _id: { $in: productIds } },
+      {
+        $push: {
+          categories: result._id
+        }
+      }
+    );
+
+    return result && updateProductsWithNewCategory ? result : null;
   }
 }
 
