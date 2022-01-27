@@ -346,3 +346,22 @@ export const validateCreateCategorySchema = checkSchema(
   },
   ['body']
 );
+
+export const validateUpdateCategorySchema = checkSchema(
+  {
+    displayName: {
+      optional: true,
+      notEmpty: true
+    },
+    products: {
+      optional: true,
+      isArray: {
+        options: {
+          min: 1
+        },
+        errorMessage: 'Products array must be not empty. Add products ids or remove property.'
+      }
+    }
+  },
+  ['body']
+);

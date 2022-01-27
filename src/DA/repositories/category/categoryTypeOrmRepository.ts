@@ -2,6 +2,8 @@ import checkProductIdsValid from '../../../helpers/productIdsValidation';
 import { ICategoryRepository, ICategory, ICategorySearchParams } from '../../../types/types';
 import { CategoryEntity } from '../../postgresql/entities/category.entity';
 import { ProductEntity } from '../../postgresql/entities/product.entity';
+import HttpException from '../../../exceptions/exceptions';
+
 class CategoryTypeOrmRepository implements ICategoryRepository {
   async getCategories(): Promise<ICategory[]> {
     const data = await CategoryEntity.find({
@@ -66,6 +68,30 @@ class CategoryTypeOrmRepository implements ICategoryRepository {
     category.createdAt = new Date();
     category.products = products;
     const result = await category.save();
+
+    return result ? result : null;
+  }
+
+  async updateCategory(id: string, displayName?: string, productIds?: string[]) {
+    const category = await CategoryEntity.findOne(id);
+    let result;
+    if (category) {
+      if (displayName) {
+        category.displayName = displayName;
+      }
+      if (productIds) {
+        const products = await ProductEntity.createQueryBuilder('product')
+          .where('product._id IN (:...productIds)', {
+            productIds
+          })
+          .getMany();
+        await checkProductIdsValid(productIds, products);
+        category.products = products;
+      }
+      result = await category.save();
+    } else {
+      throw new HttpException(404, `Category with id=${id} not found.`);
+    }
 
     return result ? result : null;
   }

@@ -3,7 +3,7 @@ import HttpException from '../../exceptions/exceptions';
 import authenticateTokenMiddleware from '../../middlewares/authorization/authorization.middleware';
 import checkUserRoleMiddleware from '../../middlewares/checkUserRole/checkUserRole.middleware';
 import { CategoryService } from '../../service/categories.service';
-import { validateCreateCategorySchema } from '../../validators/validationSchemas';
+import { validateCreateCategorySchema, validateUpdateCategorySchema } from '../../validators/validationSchemas';
 import validationResultMiddleware from '../../middlewares/validationResultHandler/validationResultHandler.middleware';
 
 const categoryService = new CategoryService();
@@ -46,6 +46,31 @@ export const CategoriesAdminRouter = (router: Router): void => {
           resp.status(201).json({ result });
         } else {
           throw new HttpException(500, 'An error occured trying to create new category.');
+        }
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
+
+  router.patch(
+    '/admin/categories/:id',
+    authenticateTokenMiddleware,
+    (req: Request, resp: Response, next: NextFunction) => {
+      checkUserRoleMiddleware(req, resp, next, 'admin');
+    },
+    validateUpdateCategorySchema,
+    validationResultMiddleware,
+    async (req: Request, resp: Response, next: NextFunction) => {
+      const { id } = req.params;
+      const { displayName, products } = req.body;
+
+      try {
+        const updateResult = await categoryService.updateCategory(id, displayName, products);
+        if (updateResult) {
+          resp.status(200).json({ message: `Category with id=${id} successfully updated.`, result: updateResult });
+        } else {
+          throw new HttpException(500, 'An error occurred trying to update category.');
         }
       } catch (err) {
         next(err);

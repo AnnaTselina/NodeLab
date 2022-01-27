@@ -22,4 +22,9 @@ export class CategoryService {
     const createResult = await CategoryRepository.createCategory(displayName, productIds);
     return createResult;
   }
+
+  public async updateCategory(id: string, displayName?: string, productIds?: string[]) {
+    const updateResult = await CategoryRepository.updateCategory(id, displayName, productIds);
+    return updateResult;
+  }
 }

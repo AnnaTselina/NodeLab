@@ -485,6 +485,68 @@
             "bearerAuth": []
           }
         ]
+      },
+      "patch": {
+        "tags": ["categories"],
+        "summary": "Update category specified by id",
+        "description": "Update displayName or products list of a category (available for admins only).",
+        "operationId": "updateCategory",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of category",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Provide displayName and/or products as not empty array of products ids. Only valid category id and product ids are accepted.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "displayNmae": {
+                    "type": "string"
+                  },
+                  "products": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Category with provided id successfully updated. Updated category returned."
+          },
+          "404": {
+            "description": "Category with provided id not found or products with provided ids not found."
+          },
+          "500": {
+            "description": "An error occurred trying to update category."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/admin/categories": {

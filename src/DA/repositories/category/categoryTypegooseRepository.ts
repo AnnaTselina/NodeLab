@@ -3,6 +3,7 @@ import { CategoryModel } from '../../mongoDB/models/category.model';
 import { ProductClass, ProductModel } from '../../mongoDB/models/product.model';
 import { ICategory } from '../../../types/types';
 import checkProductIdsValid from '../../../helpers/productIdsValidation';
+import HttpException from '../../../exceptions/exceptions';
 
 class CategoryTypegooseRepository {
   async getCategories(): Promise<ICategory[] | null> {
@@ -59,6 +60,26 @@ class CategoryTypegooseRepository {
     );
 
     return result && updateProductsWithNewCategory ? result : null;
+  }
+
+  async updateCategory(id: string, displayName?: string, productIds?: string[]) {
+    const category = await CategoryModel.findById(id);
+    if (!category) {
+      throw new HttpException(404, `Category with id=${id} not found.`);
+    }
+    if (displayName) {
+      category.displayName = displayName;
+    }
+    if (productIds) {
+      await checkProductIdsValid(productIds);
+      const oldProductsIds = category.products?.map((id) => id.toString());
+      category.set({ products: productIds });
+      await ProductModel.updateMany({ _id: { $in: oldProductsIds } }, { $pull: { categories: id } });
+      await ProductModel.updateMany({ _id: { $in: productIds } }, { $push: { categories: id } });
+    }
+    const result = await category.save();
+
+    return result ? result : null;
   }
 }
 
