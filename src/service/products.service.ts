@@ -34,18 +34,8 @@ export class ProductsService {
   }
 
   public async updateProductInfo(id: string, displayName?: string, categories?: string[], price?: number) {
-    const product = await ProductRepository.getProductById(id);
-    if (!product) {
-      throw new HttpException(404, `Product with id=${id} not found.`);
-    }
-
-    if (categories) {
-      await checkCategoryIdsValid(categories);
-    }
-
-    const updateMainInfoResult = await ProductRepository.updateProductInfo(id, displayName, categories, price);
-
-    return updateMainInfoResult;
+    const updateResult = await ProductRepository.updateProductInfo(id, displayName, categories, price);
+    return updateResult;
   }
 
   public async deleteProduct(id: string) {

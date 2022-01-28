@@ -18,7 +18,7 @@ export const CategoriesAdminRouter = (router: Router): void => {
     async (req: Request, resp: Response, next: NextFunction) => {
       const { id } = req.params;
       try {
-        const result = await categoryService.getCategoryById(id, {});
+        const result = await categoryService.getCategoryById(id, { includeProducts: 'true' });
         if (result) {
           resp.status(200).json({ result });
         } else {

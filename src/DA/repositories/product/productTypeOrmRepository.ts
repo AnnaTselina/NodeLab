@@ -3,6 +3,7 @@ import { ProductEntity } from '../../postgresql/entities/product.entity';
 import { parseProductQuerySearchParams } from '../../../helpers/productParamsParser';
 import { CategoryEntity } from '../../postgresql/entities/category.entity';
 import checkCategoryIdsValid from '../../../helpers/categoryIdsValidation';
+import HttpException from '../../../exceptions/exceptions';
 
 class ProductTypeOrmRepository implements IProductRepository {
   async getProducts(queryParams: IProductSearchParams): Promise<IProduct[]> {
@@ -78,9 +79,13 @@ class ProductTypeOrmRepository implements IProductRepository {
             categoryIds
           })
           .getMany();
+        await checkCategoryIdsValid(categoryIds, categories);
         product.categories = categories;
       }
+
       result = await product.save();
+    } else {
+      throw new HttpException(404, `Product with id=${id} not found.`);
     }
 
     return result ? result : null;

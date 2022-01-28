@@ -3,6 +3,7 @@ import { IProductSearchParams, IProduct } from '../../../types/types';
 import { parseProductQuerySearchParams } from '../../../helpers/productParamsParser';
 import checkCategoryIdsValid from '../../../helpers/categoryIdsValidation';
 import { CategoryModel } from '../../mongoDB/models/category.model';
+import HttpException from '../../../exceptions/exceptions';
 
 class ProductTypegooseRepository {
   async getProducts(queryParams: IProductSearchParams): Promise<IProduct[]> {
@@ -55,22 +56,26 @@ class ProductTypegooseRepository {
   }
 
   async updateProductInfo(id: string, displayName?: string, categoryIds?: string[], price?: number) {
-    const infoToBeUpdated: {
-      displayName?: string;
-      price?: number;
-      $set?: { categories: string[] };
-    } = {};
-    if (displayName) {
-      infoToBeUpdated.displayName = displayName;
-    }
-    if (price) {
-      infoToBeUpdated.price = price;
-    }
-    if (categoryIds) {
-      infoToBeUpdated.$set = { categories: categoryIds };
+    const product = await ProductModel.findById(id);
+    if (!product) {
+      throw new HttpException(404, `Product with id=${id} not found.`);
     }
 
-    const result = await ProductModel.findOneAndUpdate({ _id: id }, { ...infoToBeUpdated }, { new: true });
+    if (displayName) {
+      product.displayName = displayName;
+    }
+    if (price) {
+      product.price = price;
+    }
+    if (categoryIds) {
+      await checkCategoryIdsValid(categoryIds);
+      const oldCategoryIds = product.categories.map((id) => id.toString());
+      product.set({ categories: categoryIds });
+      await CategoryModel.updateMany({ _id: { $in: oldCategoryIds } }, { $pull: { products: id } });
+      await CategoryModel.updateMany({ _id: { $in: categoryIds } }, { $push: { products: id } });
+    }
+
+    const result = await product.save();
 
     return result ? result : null;
   }
