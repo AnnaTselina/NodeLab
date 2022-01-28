@@ -81,6 +81,21 @@ class CategoryTypegooseRepository {
 
     return result ? result : null;
   }
+
+  async deleteCategory(id: string) {
+    const category = await CategoryModel.findById(id);
+    if (!category) {
+      throw new HttpException(400, `Category with id=${id} not found.`);
+    }
+    const resultCategoryDelete = await category.deleteOne();
+
+    const updateProductsResult = await ProductModel.updateMany(
+      { _id: { $in: resultCategoryDelete?.products } },
+      { $pull: { categories: id } }
+    );
+
+    return resultCategoryDelete && updateProductsResult ? true : false;
+  }
 }
 
 export default CategoryTypegooseRepository;

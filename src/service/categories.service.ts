@@ -27,4 +27,9 @@ export class CategoryService {
     const updateResult = await CategoryRepository.updateCategory(id, displayName, productIds);
     return updateResult;
   }
+
+  public async deleteCategory(id: string) {
+    const deleteResult = await CategoryRepository.deleteCategory(id);
+    return deleteResult;
+  }
 }

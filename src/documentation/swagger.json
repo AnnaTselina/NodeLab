@@ -547,6 +547,39 @@
             "bearerAuth": []
           }
         ]
+      },
+      "delete": {
+        "tags": ["categories"],
+        "summary": "Delete category specified by id",
+        "description": "Delete existing category by providing valid category id (available for admins only).",
+        "operationId": "deleteCategory",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of category",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category with provided id successfully deleted."
+          },
+          "400": {
+            "description": "Category with provided id not found."
+          },
+          "500": {
+            "description": "An error occured trying to delete category."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/admin/categories": {

@@ -95,6 +95,16 @@ class CategoryTypeOrmRepository implements ICategoryRepository {
 
     return result ? result : null;
   }
+
+  async deleteCategory(id: string) {
+    const category = await CategoryEntity.createQueryBuilder('category').where({ _id: id }).getOne();
+    if (!category) {
+      throw new HttpException(400, `Category with id=${id} not found.`);
+    }
+
+    const result = await category.remove();
+    return result ? true : false;
+  }
 }
 
 export default CategoryTypeOrmRepository;
