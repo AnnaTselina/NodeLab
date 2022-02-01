@@ -109,6 +109,7 @@ export interface IUserRating {
   productId?: number;
   rating: number;
   comment?: string;
+  updatedAt: Date;
 }
 
 export interface IOrderListRepository {

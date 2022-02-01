@@ -1,4 +1,3 @@
-import { ObjectId } from '../../../types/types';
 import { ProductModel } from '../../mongoDB/models/product.model';
 import mongoose from 'mongoose';
 
@@ -17,10 +16,7 @@ class UserRatingsTypegooseRepository {
     return data ? true : false;
   }
 
-  async getUserRatingByProductId(
-    userId: string,
-    productId: string
-  ): Promise<{ userId: ObjectId; rating: number; comment?: string } | null> {
+  async getUserRatingByProductId(userId: string, productId: string) {
     const data = await ProductModel.findOne(
       {
         _id: productId,

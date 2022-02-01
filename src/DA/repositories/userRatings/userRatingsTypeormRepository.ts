@@ -6,7 +6,7 @@ class UserRatingsTypeormRepository {
     const query = UserRatingsEntity.createQueryBuilder()
       .insert()
       .into('userratings')
-      .values({ userId, productId, rating, comment });
+      .values({ userId, productId, rating, comment, updatedAt: new Date() });
 
     const result = await query.execute();
 
@@ -18,6 +18,7 @@ class UserRatingsTypeormRepository {
 
     if (userRating) {
       userRating.rating = rating;
+      userRating.updatedAt = new Date();
       if (comment) {
         userRating.comment = comment;
       }
@@ -43,7 +44,8 @@ class UserRatingsTypeormRepository {
   }
 
   async getLastTenRatings() {
-    return null;
+    const result = await UserRatingsEntity.find({ select: ['userId', 'rating', 'comment', 'updatedAt'] });
+    return result ? result : null;
   }
 }
 
