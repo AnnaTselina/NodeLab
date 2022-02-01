@@ -10,7 +10,7 @@ class UserRatingsTypegooseRepository {
       },
       {
         $push: {
-          ratings: { userId, rating: rating, comment: comment || '' }
+          ratings: { userId, rating: rating, comment: comment || '', updatedAt: new Date() }
         }
       }
     );
@@ -42,8 +42,9 @@ class UserRatingsTypegooseRepository {
   }
 
   async updateRating(userId: string, productId: string, rating: number, comment?: string) {
-    const updateBlock: { 'ratings.$.rating': number; 'ratings.$.comment'?: string } = {
-      'ratings.$.rating': rating
+    const updateBlock: { 'ratings.$.rating': number; 'ratings.$.comment'?: string; 'ratings.$.updatedAt': Date } = {
+      'ratings.$.rating': rating,
+      'ratings.$.updatedAt': new Date()
     };
 
     if (comment) {
@@ -71,6 +72,17 @@ class UserRatingsTypegooseRepository {
       { $project: { average: { $round: [{ $avg: '$ratings.rating' }, 2] } } }
     ]);
     return data[0] && data[0].average ? data[0].average : null;
+  }
+
+  async getLastTenRatings() {
+    const data = await ProductModel.aggregate([
+      { $match: { ratings: { $exists: true, $not: { $size: 0 } } } },
+      { $unwind: '$ratings' },
+      { $replaceRoot: { newRoot: '$ratings' } },
+      { $sort: { updatedAt: -1 } }
+    ]);
+
+    return data ? data : null;
   }
 }
 

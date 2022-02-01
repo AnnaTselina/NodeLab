@@ -41,6 +41,10 @@ class UserRatingsTypeormRepository {
     const average = await entityManager.query(`select AVG(rating) from userratings WHERE "productId"='${productId}'`);
     return average ? Number(average[0].avg) : null;
   }
+
+  async getLastTenRatings() {
+    return null;
+  }
 }
 
 export default UserRatingsTypeormRepository;

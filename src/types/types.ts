@@ -100,6 +100,7 @@ export interface IUserRatingsRepository {
   getUserRatingByProductId(userId: string, productId: string): Promise<IUserRating | null>;
   updateRating(userId: string, productId: string, rating: number, comment?: string): Promise<boolean>;
   countAverageProductRating(productId: string): Promise<number | null>;
+  getLastTenRatings(): Promise<IUserRating[] | null>;
 }
 
 export interface IUserRating {

@@ -26,4 +26,9 @@ export class UserRatingsService {
     }
     return putUserRating && updateProductTotalRating;
   }
+
+  public async getLastTenRatings() {
+    const result = await UserRatingsRepository.getLastTenRatings();
+    return result;
+  }
 }

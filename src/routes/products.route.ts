@@ -52,4 +52,21 @@ export const ProductsRouter = (router: Router): void => {
       }
     }
   );
+
+  router.get('/lastRatings', async (req: Request, resp: Response, next: NextFunction) => {
+    try {
+      const result = await userRatingsService.getLastTenRatings();
+      if (result) {
+        if (result.length) {
+          resp.status(200).json({ result });
+        } else {
+          resp.status(404).json({ message: 'Last ratings not found.' });
+        }
+      } else {
+        throw new HttpException(500, 'An error occurred trying to get last 10 ratings.');
+      }
+    } catch (err) {
+      next(err);
+    }
+  });
 };

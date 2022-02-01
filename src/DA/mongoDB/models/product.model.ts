@@ -20,7 +20,7 @@ export class ProductClass {
   public price!: number;
 
   @prop({ default: [] })
-  public ratings!: Array<{ userId: ObjectId; rating: number; comment: string }>;
+  public ratings!: Array<{ userId: ObjectId; rating: number; comment: string; updatedAt: Date }>;
 }
 
 export const ProductModel = getModelForClass(ProductClass);
