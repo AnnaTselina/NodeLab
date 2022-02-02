@@ -44,7 +44,7 @@ class UserRatingsTypeormRepository {
   }
 
   async getLastTenRatings() {
-    const result = await UserRatingsEntity.find({ select: ['userId', 'rating', 'comment', 'updatedAt'] });
+    const result = await UserRatingsEntity.find({ select: ['userId', 'rating', 'comment', 'updatedAt'], take: 10 });
     return result ? result : null;
   }
 }

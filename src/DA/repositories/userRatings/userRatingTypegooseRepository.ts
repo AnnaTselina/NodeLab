@@ -75,7 +75,8 @@ class UserRatingsTypegooseRepository {
       { $match: { ratings: { $exists: true, $not: { $size: 0 } } } },
       { $unwind: '$ratings' },
       { $replaceRoot: { newRoot: '$ratings' } },
-      { $sort: { updatedAt: -1 } }
+      { $sort: { updatedAt: -1 } },
+      { $limit: 10 }
     ]);
 
     return data ? data : null;

@@ -1,9 +1,12 @@
 import { Jwt } from 'jsonwebtoken';
 import expres from 'express';
 
-declare namespace NodeJS {
-  export interface ProcessEnv {
-    MONGODB_CONNECTION: string;
+declare global {
+  namespace NodeJS {
+    interface ProcessEnv {
+      MONGODB_CONNECTION: string;
+      WEBSOCKET_PORT: number;
+    }
   }
 }
 
