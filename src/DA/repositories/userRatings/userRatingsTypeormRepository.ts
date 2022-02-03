@@ -6,11 +6,10 @@ class UserRatingsTypeormRepository {
     const query = UserRatingsEntity.createQueryBuilder()
       .insert()
       .into('userratings')
-      .values({ userId, productId, rating, comment, updatedAt: new Date() });
-
+      .values({ userId, productId, rating, comment, updatedAt: new Date() })
+      .returning('*');
     const result = await query.execute();
-
-    return result ? true : false;
+    return result ? result.raw[0] : null;
   }
 
   async updateRating(userId: string, productId: string, rating: number, comment?: string) {
@@ -23,9 +22,9 @@ class UserRatingsTypeormRepository {
         userRating.comment = comment;
       }
       const result = await userRating.save();
-      return result ? true : false;
+      return result ? result : null;
     } else {
-      return false;
+      return null;
     }
   }
 

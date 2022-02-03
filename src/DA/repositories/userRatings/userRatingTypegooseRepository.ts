@@ -11,9 +11,11 @@ class UserRatingsTypegooseRepository {
         $push: {
           ratings: { userId, rating: rating, comment: comment || '', updatedAt: new Date() }
         }
-      }
+      },
+      { new: true }
     );
-    return data ? true : false;
+    const addedRating = data?.ratings.filter((rating) => rating.userId.toString() === userId)[0];
+    return addedRating ? addedRating : null;
   }
 
   async getUserRatingByProductId(userId: string, productId: string) {
@@ -57,9 +59,12 @@ class UserRatingsTypegooseRepository {
       },
       {
         $set: updateBlock
-      }
+      },
+      { new: true }
     );
-    return data ? true : false;
+    const updatedRating = data?.ratings.filter((rating) => rating.userId.toString() === userId)[0];
+
+    return updatedRating ? updatedRating : null;
   }
 
   async countAverageProductRating(productId: string) {

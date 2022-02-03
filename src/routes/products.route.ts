@@ -49,7 +49,7 @@ export const ProductsRouter = (router: Router): void => {
         if (rateResult) {
           server.clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN) {
-              client.send(JSON.stringify({ userId: user.username, rating, comment }));
+              client.send(JSON.stringify({ rateResult }));
             }
           });
 
