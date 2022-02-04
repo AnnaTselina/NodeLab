@@ -96,14 +96,9 @@ export interface IUserAccount {
 }
 
 export interface IUserRatingsRepository {
-  addRating(userId: string, productId: string, rating: number, comment?: string): Promise<boolean | IUserRating | null>;
+  addRating(userId: string, productId: string, rating: number, comment?: string): Promise<IUserRating | null>;
   getUserRatingByProductId(userId: string, productId: string): Promise<IUserRating | null>;
-  updateRating(
-    userId: string,
-    productId: string,
-    rating: number,
-    comment?: string
-  ): Promise<boolean | IUserRating | null>;
+  updateRating(userId: string, productId: string, rating: number, comment?: string): Promise<IUserRating | null>;
   countAverageProductRating(productId: string): Promise<number | null>;
   getLastTenRatings(): Promise<IUserRating[] | null>;
 }
