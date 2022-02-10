@@ -1,4 +1,3 @@
-import { ObjectId } from '../../../types/types';
 import { ProductModel } from '../../mongoDB/models/product.model';
 import mongoose from 'mongoose';
 
@@ -10,17 +9,16 @@ class UserRatingsTypegooseRepository {
       },
       {
         $push: {
-          ratings: { userId, rating: rating, comment: comment || '' }
+          ratings: { userId, rating: rating, comment: comment || '', updatedAt: new Date() }
         }
-      }
+      },
+      { new: true }
     );
-    return data ? true : false;
+    const addedRating = data?.ratings.filter((rating) => rating.userId.toString() === userId)[0];
+    return addedRating ? addedRating : null;
   }
 
-  async getUserRatingByProductId(
-    userId: string,
-    productId: string
-  ): Promise<{ userId: ObjectId; rating: number; comment?: string } | null> {
+  async getUserRatingByProductId(userId: string, productId: string) {
     const data = await ProductModel.findOne(
       {
         _id: productId,
@@ -42,8 +40,9 @@ class UserRatingsTypegooseRepository {
   }
 
   async updateRating(userId: string, productId: string, rating: number, comment?: string) {
-    const updateBlock: { 'ratings.$.rating': number; 'ratings.$.comment'?: string } = {
-      'ratings.$.rating': rating
+    const updateBlock: { 'ratings.$.rating': number; 'ratings.$.comment'?: string; 'ratings.$.updatedAt': Date } = {
+      'ratings.$.rating': rating,
+      'ratings.$.updatedAt': new Date()
     };
 
     if (comment) {
@@ -60,9 +59,12 @@ class UserRatingsTypegooseRepository {
       },
       {
         $set: updateBlock
-      }
+      },
+      { new: true }
     );
-    return data ? true : false;
+    const updatedRating = data?.ratings.filter((rating) => rating.userId.toString() === userId)[0];
+
+    return updatedRating ? updatedRating : null;
   }
 
   async countAverageProductRating(productId: string) {
@@ -71,6 +73,18 @@ class UserRatingsTypegooseRepository {
       { $project: { average: { $round: [{ $avg: '$ratings.rating' }, 2] } } }
     ]);
     return data[0] && data[0].average ? data[0].average : null;
+  }
+
+  async getLastTenRatings() {
+    const data = await ProductModel.aggregate([
+      { $match: { ratings: { $exists: true, $not: { $size: 0 } } } },
+      { $unwind: '$ratings' },
+      { $replaceRoot: { newRoot: '$ratings' } },
+      { $sort: { updatedAt: -1 } },
+      { $limit: 10 }
+    ]);
+
+    return data ? data : null;
   }
 }
 

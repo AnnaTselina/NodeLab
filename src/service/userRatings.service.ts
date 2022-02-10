@@ -24,6 +24,11 @@ export class UserRatingsService {
     } else {
       throw new HttpException(500, 'An error occured getting total product rating.');
     }
-    return putUserRating && updateProductTotalRating;
+    return updateProductTotalRating && putUserRating;
+  }
+
+  public async getLastTenRatings() {
+    const result = await UserRatingsRepository.getLastTenRatings();
+    return result;
   }
 }

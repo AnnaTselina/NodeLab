@@ -16,4 +16,7 @@ export class UserRatingsEntity extends BaseEntity {
 
   @Column({ nullable: true })
   comment?: string;
+
+  @Column()
+  updatedAt!: Date;
 }

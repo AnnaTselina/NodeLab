@@ -6,6 +6,10 @@ import { validateNewRatingSchema, validationProductsSchema } from '../validators
 import authenticateTokenMiddleware from '../middlewares/authorization/authorization.middleware';
 import checkUserRoleMiddleware from '../middlewares/checkUserRole/checkUserRole.middleware';
 import { UserRatingsService } from '../service/userRatings.service';
+import WebSocket from 'ws';
+
+const port = process.env['WEBSOCKET_PORT'] || 3020;
+const server = new WebSocket.Server({ port });
 
 const productService = new ProductsService();
 const userRatingsService = new UserRatingsService();
@@ -43,6 +47,12 @@ export const ProductsRouter = (router: Router): void => {
       try {
         const rateResult = await userRatingsService.rateProduct(user._id, id, rating, comment);
         if (rateResult) {
+          server.clients.forEach((client) => {
+            if (client.readyState === WebSocket.OPEN) {
+              client.send(JSON.stringify({ rateResult }));
+            }
+          });
+
           resp.status(200).json({ result: 'Product rating successfully updated.' });
         } else {
           throw new HttpException(500, 'An error occured trying to update product rating.');
@@ -52,4 +62,21 @@ export const ProductsRouter = (router: Router): void => {
       }
     }
   );
+
+  router.get('/lastRatings', async (req: Request, resp: Response, next: NextFunction) => {
+    try {
+      const result = await userRatingsService.getLastTenRatings();
+      if (result) {
+        if (result.length) {
+          resp.status(200).json({ result });
+        } else {
+          resp.status(404).json({ message: 'Last ratings not found.' });
+        }
+      } else {
+        throw new HttpException(500, 'An error occurred trying to get last 10 ratings.');
+      }
+    } catch (err) {
+      next(err);
+    }
+  });
 };

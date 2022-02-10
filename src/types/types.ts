@@ -110,10 +110,11 @@ export interface IUserAccount {
 }
 
 export interface IUserRatingsRepository {
-  addRating(userId: string, productId: string, rating: number, comment?: string): Promise<boolean>;
+  addRating(userId: string, productId: string, rating: number, comment?: string): Promise<IUserRating | null>;
   getUserRatingByProductId(userId: string, productId: string): Promise<IUserRating | null>;
-  updateRating(userId: string, productId: string, rating: number, comment?: string): Promise<boolean>;
+  updateRating(userId: string, productId: string, rating: number, comment?: string): Promise<IUserRating | null>;
   countAverageProductRating(productId: string): Promise<number | null>;
+  getLastTenRatings(): Promise<IUserRating[] | null>;
 }
 
 export interface IUserRating {
@@ -122,6 +123,7 @@ export interface IUserRating {
   productId?: number;
   rating: number;
   comment?: string;
+  updatedAt: Date;
 }
 
 export interface IOrderListRepository {
