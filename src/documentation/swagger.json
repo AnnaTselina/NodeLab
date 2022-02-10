@@ -151,6 +151,207 @@
         ]
       }
     },
+    "/admin/products/{id}": {
+      "get": {
+        "tags": ["products"],
+        "summary": "Get product",
+        "description": "Get product with provided id (available for admins only).",
+        "operationId": "getProduct",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of product",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product with provided if found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product with provided id not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": ["products"],
+        "summary": "Update existing product",
+        "description": "Update displayName, price and/or categories of a product (available for admins only).",
+        "operationId": "updateProduct",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of product",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Provide displayName and/or price and/or categories as not empty array pf categoris ids. Only valid product id and categories ids are accepted.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "displayNmae": {
+                    "type": "string"
+                  },
+                  "categories": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ]
+                    }
+                  },
+                  "price": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Product info successfully updated."
+          },
+          "404": {
+            "description": "Product or categories with provided ids not found."
+          },
+          "500": {
+            "description": "An error occurred trying to update product."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["products"],
+        "summary": "Delete existing product",
+        "description": "Delete existing product by providing valid product id (available for admins only).",
+        "operationId": "deleteProduct",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of product",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product with provided id successfully deleted."
+          },
+          "404": {
+            "description": "Product with provided id not found."
+          },
+          "500": {
+            "description": "An error occured trying to delete product."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/admin/products": {
+      "post": {
+        "tags": ["products"],
+        "summary": "Create new product",
+        "description": "Create new product providing displayName, categories and price (available for admins only).",
+        "operationId": "createProduct",
+        "requestBody": {
+          "description": "Provide displayName, categories ids and price of a product. Only product with unique name and valid categories ids accepted.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "displayNmae": {
+                    "type": "string"
+                  },
+                  "categories": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ]
+                    }
+                  },
+                  "price": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "New product successfully created."
+          },
+          "400": {
+            "description": "Product with provided displayName already exists."
+          },
+          "404": {
+            "description": "Categories with provided ids do not exist."
+          },
+          "500": {
+            "description": "An error occurred trying to create new product."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/categories": {
       "get": {
         "tags": ["categories"],
@@ -252,6 +453,189 @@
             }
           }
         }
+      }
+    },
+    "/admin/categories/{id}": {
+      "get": {
+        "tags": ["categories"],
+        "summary": "Get category specified by id.",
+        "description": "Get category by id (available for admins only).",
+        "operationId": "getCategory",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of category",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category info with provided id returned."
+          },
+          "404": {
+            "description": "Category with provided id not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": ["categories"],
+        "summary": "Update category specified by id",
+        "description": "Update displayName or products list of a category (available for admins only).",
+        "operationId": "updateCategory",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of category",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Provide displayName and/or products as not empty array of products ids. Only valid category id and product ids are accepted.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "displayNmae": {
+                    "type": "string"
+                  },
+                  "products": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Category with provided id successfully updated. Updated category returned."
+          },
+          "404": {
+            "description": "Category with provided id not found or products with provided ids not found."
+          },
+          "500": {
+            "description": "An error occurred trying to update category."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["categories"],
+        "summary": "Delete category specified by id",
+        "description": "Delete existing category by providing valid category id (available for admins only).",
+        "operationId": "deleteCategory",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of category",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category with provided id successfully deleted."
+          },
+          "400": {
+            "description": "Category with provided id not found."
+          },
+          "500": {
+            "description": "An error occured trying to delete category."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/admin/categories": {
+      "post": {
+        "tags": ["categories"],
+        "summary": "Create new category",
+        "description": "Create new category specifying name and products (available for admins only).",
+        "operationId": "createCategory",
+        "requestBody": {
+          "description": "Provide displayName, product ids of a category. Only category with unique name and valid product ids accepted.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "displayNmae": {
+                    "type": "string"
+                  },
+                  "products": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "New category successfully created and returned as a result"
+          },
+          "400": {
+            "description": "Category with provided name already exists."
+          },
+          "404": {
+            "description": "Products with provided ids not found."
+          },
+          "500": {
+            "description": "An error occured trying to create new category."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/register": {

@@ -1,5 +1,5 @@
-import { prop, getModelForClass, Ref } from '@typegoose/typegoose';
-import { ProductClass } from './product.model';
+import { prop, getModelForClass, mongoose } from '@typegoose/typegoose';
+
 export class CategoryClass {
   @prop({ required: true })
   public displayName!: string;
@@ -11,7 +11,7 @@ export class CategoryClass {
     ref: () => 'ProductClass',
     default: []
   })
-  public products?: Ref<ProductClass>[];
+  public products?: mongoose.Types.ObjectId[];
 }
 
 export const CategoryModel = getModelForClass(CategoryClass);

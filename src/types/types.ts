@@ -40,11 +40,25 @@ export interface IProductRepository {
   getProductById: (id: string) => Promise<IProduct | null>;
   updateProductTotalRating: (id: string, newRating: number) => Promise<boolean>;
   getProductsByIds: (productsIds: string[]) => Promise<IProduct[] | null>;
+  getProductByName: (displayName: string) => Promise<IProduct | null>;
+  createNewProduct: (displayName: string, categoryIds: string[], price: number) => Promise<IProduct | null>;
+  updateProductInfo: (
+    id: string,
+    displayName?: string,
+    categoryIds?: string[],
+    price?: number
+  ) => Promise<IProduct | null>;
+  deleteProductById: (id: string) => Promise<boolean>;
 }
 
 export interface ICategoryRepository {
   getCategories: () => Promise<ICategory[] | null>;
   getCategoryById: (categoryId: string, queryParams: ICategorySearchParams) => Promise<ICategory | null>;
+  getCategoriesById: (categoryIds: string[]) => Promise<ICategory[] | null>;
+  getCategoryByName: (displayName: string) => Promise<ICategory | null>;
+  createCategory: (displayName: string, productIds?: string[]) => Promise<ICategory | null>;
+  updateCategory: (id: string, displayName?: string, productIds?: string[]) => Promise<ICategory | null>;
+  deleteCategory: (id: string) => Promise<boolean>;
 }
 
 export interface IProductFilterParamsMongo {
@@ -126,4 +140,10 @@ export interface IOrderListProduct {
 export interface IOrderListProducts<T> {
   _id: T;
   products: IOrderListProduct[];
+}
+
+export interface IProductCreateData {
+  displayName: string;
+  categories: string[];
+  price: number;
 }

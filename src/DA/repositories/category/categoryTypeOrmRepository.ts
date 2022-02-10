@@ -1,5 +1,9 @@
+import checkProductIdsValid from '../../../helpers/productIdsValidation';
 import { ICategoryRepository, ICategory, ICategorySearchParams } from '../../../types/types';
 import { CategoryEntity } from '../../postgresql/entities/category.entity';
+import { ProductEntity } from '../../postgresql/entities/product.entity';
+import HttpException from '../../../exceptions/exceptions';
+
 class CategoryTypeOrmRepository implements ICategoryRepository {
   async getCategories(): Promise<ICategory[]> {
     const data = await CategoryEntity.find({
@@ -30,6 +34,76 @@ class CategoryTypeOrmRepository implements ICategoryRepository {
     const data = await query.getOne();
 
     return data ? data : null;
+  }
+
+  async getCategoriesById(categoryIds: string[]) {
+    const data = await CategoryEntity.createQueryBuilder('category')
+      .where('category._id IN (:...categoryIds)', {
+        categoryIds
+      })
+      .getMany();
+    return data ? data : null;
+  }
+
+  async getCategoryByName(displayName: string) {
+    const data = await CategoryEntity.findOne({ displayName });
+
+    return data ? data : null;
+  }
+
+  async createCategory(displayName: string, productIds?: string[]) {
+    let products;
+    if (productIds) {
+      const productsEntities = await ProductEntity.createQueryBuilder('product')
+        .where('product._id IN (:...productIds)', {
+          productIds
+        })
+        .getMany();
+      await checkProductIdsValid(productIds, products);
+      products = productsEntities;
+    }
+
+    const category = new CategoryEntity();
+    category.displayName = displayName;
+    category.createdAt = new Date();
+    category.products = products;
+    const result = await category.save();
+
+    return result ? result : null;
+  }
+
+  async updateCategory(id: string, displayName?: string, productIds?: string[]) {
+    const category = await CategoryEntity.findOne(id);
+    let result;
+    if (category) {
+      if (displayName) {
+        category.displayName = displayName;
+      }
+      if (productIds) {
+        const products = await ProductEntity.createQueryBuilder('product')
+          .where('product._id IN (:...productIds)', {
+            productIds
+          })
+          .getMany();
+        await checkProductIdsValid(productIds, products);
+        category.products = products;
+      }
+      result = await category.save();
+    } else {
+      throw new HttpException(404, `Category with id=${id} not found.`);
+    }
+
+    return result ? result : null;
+  }
+
+  async deleteCategory(id: string) {
+    const category = await CategoryEntity.createQueryBuilder('category').where({ _id: id }).getOne();
+    if (!category) {
+      throw new HttpException(400, `Category with id=${id} not found.`);
+    }
+
+    const result = await category.remove();
+    return result ? true : false;
   }
 }
 

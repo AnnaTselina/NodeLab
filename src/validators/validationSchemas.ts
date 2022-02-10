@@ -252,3 +252,116 @@ export const validateOrderListIdSchema = checkSchema(
   },
   ['body']
 );
+
+export const validateCreateProductSchema = checkSchema(
+  {
+    displayName: {
+      exists: {
+        errorMessage: 'To create a new product, displayName must be provided.'
+      },
+      notEmpty: true
+    },
+    categories: {
+      isArray: {
+        options: {
+          min: 1
+        },
+        errorMessage: 'To create a new product, category(ies) must be specified in array.'
+      }
+    },
+    price: {
+      exists: {
+        errorMessage: 'To create a new product, price must be specified.'
+      },
+      isFloat: {
+        errorMessage: 'Price has to be a floating point number.'
+      },
+      custom: {
+        options: (value) => {
+          if (value > 0) {
+            return true;
+          } else {
+            return false;
+          }
+        },
+        errorMessage: 'Price has to be positive number.'
+      }
+    }
+  },
+  ['body']
+);
+
+export const validateUpdateProductSchema = checkSchema(
+  {
+    displayName: {
+      optional: true,
+      notEmpty: true
+    },
+    categories: {
+      optional: true,
+      isArray: {
+        options: {
+          min: 1
+        },
+        errorMessage: 'To update product categories, provide not empty array of categories ids.'
+      }
+    },
+    price: {
+      optional: true,
+      isFloat: {
+        errorMessage: 'Price has to be a floating point number.'
+      },
+      custom: {
+        options: (value) => {
+          if (value > 0) {
+            return true;
+          } else {
+            return false;
+          }
+        },
+        errorMessage: 'Price has to be positive number.'
+      }
+    }
+  },
+  ['body']
+);
+
+export const validateCreateCategorySchema = checkSchema(
+  {
+    displayName: {
+      exists: {
+        errorMessage: 'To create a new category, displayName must be provided.'
+      },
+      notEmpty: true
+    },
+    products: {
+      optional: true,
+      isArray: {
+        options: {
+          min: 1
+        },
+        errorMessage: 'Products array must be not empty. Add products ids or remove property.'
+      }
+    }
+  },
+  ['body']
+);
+
+export const validateUpdateCategorySchema = checkSchema(
+  {
+    displayName: {
+      optional: true,
+      notEmpty: true
+    },
+    products: {
+      optional: true,
+      isArray: {
+        options: {
+          min: 1
+        },
+        errorMessage: 'Products array must be not empty. Add products ids or remove property.'
+      }
+    }
+  },
+  ['body']
+);
