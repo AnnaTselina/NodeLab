@@ -6,6 +6,16 @@ class LastRatingsTypegooseRepository {
     const result = await rate.save();
     return result ? true : false;
   }
+
+  async getLastTenRatings() {
+    const result = await LastRatingsModel.aggregate([
+      { $sort: { _id: -1 } },
+      {
+        $limit: 10
+      }
+    ]);
+    return result ? result : null;
+  }
 }
 
 export default LastRatingsTypegooseRepository;

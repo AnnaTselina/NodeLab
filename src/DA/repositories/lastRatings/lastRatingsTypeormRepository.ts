@@ -9,6 +9,11 @@ class LastRatingsTypeormRepository {
     const result = await query.execute();
     return result ? true : false;
   }
+
+  async getLastTenRatings() {
+    const result = await LastRatingsEntity.find({ order: { _id: 'DESC' }, take: 10 });
+    return result ? result : null;
+  }
 }
 
 export default LastRatingsTypeormRepository;

@@ -68,7 +68,7 @@ export const ProductsRouter = (router: Router): void => {
 
   router.get('/lastRatings', async (req: Request, resp: Response, next: NextFunction) => {
     try {
-      const result = await userRatingsService.getLastTenRatings();
+      const result = await lastRatingsService.getLastTenRatings();
       if (result) {
         if (result.length) {
           resp.status(200).json({ result });

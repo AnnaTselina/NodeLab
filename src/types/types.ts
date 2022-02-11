@@ -152,4 +152,5 @@ export interface IProductCreateData {
 
 export interface ILastRatingsRepository {
   addRating(userId: string, productId: string, rating: number, comment?: string): Promise<boolean>;
+  getLastTenRatings(): Promise<IUserRating[] | null>;
 }

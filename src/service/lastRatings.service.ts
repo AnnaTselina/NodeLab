@@ -5,4 +5,9 @@ export class LastRatingsService {
     const result = await LastRatingsRepository.addRating(userId, productId, rating, comment);
     return result;
   }
+
+  public async getLastTenRatings() {
+    const result = await LastRatingsRepository.getLastTenRatings();
+    return result;
+  }
 }
