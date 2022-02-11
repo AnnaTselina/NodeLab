@@ -7,12 +7,14 @@ import authenticateTokenMiddleware from '../middlewares/authorization/authorizat
 import checkUserRoleMiddleware from '../middlewares/checkUserRole/checkUserRole.middleware';
 import { UserRatingsService } from '../service/userRatings.service';
 import WebSocket from 'ws';
+import { LastRatingsService } from '../service/lastRatings.service';
 
 const port = process.env['WEBSOCKET_PORT'] || 3020;
 const server = new WebSocket.Server({ port });
 
 const productService = new ProductsService();
 const userRatingsService = new UserRatingsService();
+const lastRatingsService = new LastRatingsService();
 
 export const ProductsRouter = (router: Router): void => {
   router.get(
@@ -47,6 +49,7 @@ export const ProductsRouter = (router: Router): void => {
       try {
         const rateResult = await userRatingsService.rateProduct(user._id, id, rating, comment);
         if (rateResult) {
+          await lastRatingsService.addRating(user._id, id, rating, comment);
           server.clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN) {
               client.send(JSON.stringify({ rateResult }));

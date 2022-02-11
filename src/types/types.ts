@@ -149,3 +149,7 @@ export interface IProductCreateData {
   categories: string[];
   price: number;
 }
+
+export interface ILastRatingsRepository {
+  addRating(userId: string, productId: string, rating: number, comment?: string): Promise<boolean>;
+}
