@@ -10,4 +10,9 @@ export class LastRatingsService {
     const result = await LastRatingsRepository.getLastTenRatings();
     return result;
   }
+
+  public async cleanRatings() {
+    const result = await LastRatingsRepository.cleanRatings();
+    return result;
+  }
 }
