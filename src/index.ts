@@ -12,6 +12,7 @@ import swaggerDocument from './documentation/swagger.json';
 import { OrderListsRouter } from './routes/orderLists.route';
 import { ProductsAdminRouter } from './routes/admin/products.admin.route';
 import { CategoriesAdminRouter } from './routes/admin/categories.admin.route';
+import cleanLastRatingsJob from './jobs/lastRatingsCleaner';
 
 const app: Application = express();
 app.use(express.json());
@@ -44,6 +45,7 @@ const startApp = () => {
     dbConnection().then(() => {
       app.listen(port, () => {
         console.log(`Server has been started on port ${port}...`);
+        cleanLastRatingsJob();
       });
     });
   } catch (e) {

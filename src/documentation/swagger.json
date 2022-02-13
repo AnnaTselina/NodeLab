@@ -151,6 +151,40 @@
         ]
       }
     },
+    "/lastRatings": {
+      "get": {
+        "tags": ["products"],
+        "summary": "Get last 10 submitted ratings",
+        "description": "Get last ratings (userId, ratings, comment, productId, date of update) submitted by users.",
+        "operationId": "getLastRatings",
+        "responses": {
+          "200": {
+            "description": "Not empty array of last submitted ratings returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/UserRating"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Last ratings array is empty."
+          },
+          "500": {
+            "description": "An error occurred trying to get last 10 ratings."
+          }
+        }
+      }
+    },
     "/admin/products/{id}": {
       "get": {
         "tags": ["products"],
@@ -1354,6 +1388,26 @@
                 }
               }
             }
+          }
+        }
+      },
+      "UserRating": {
+        "type": "object",
+        "properties": {
+          "comment": {
+            "type": "string"
+          },
+          "productId": {
+            "type": "string"
+          },
+          "ratings": {
+            "type": "number"
+          },
+          "updatedAt": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
           }
         }
       }
