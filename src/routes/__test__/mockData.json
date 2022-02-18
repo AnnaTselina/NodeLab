@@ -1,0 +1,35 @@
+{
+  "userValidData": {
+    "username": "test@test.com",
+    "password": "Password00"
+  },
+  "userWithInvalidPassword": {
+    "username": "test@test.com",
+    "password": "000"
+  },
+  "userWithIncorrectUserName": {
+    "username": "nonExistUsername@test.com",
+    "password": "Password00"
+  },
+  "userWithIncorrectPassword": {
+    "username": "test@test.com",
+    "password": "Password11"
+  },
+  "testingProducts": [
+    {
+      "displayName": "testProductName1",
+      "categories": [],
+      "price": 100
+    },
+    {
+      "displayName": "testProductName2",
+      "categories": [],
+      "price": 90
+    },
+    {
+      "displayName": "testProductName3",
+      "categories": [],
+      "price": 80
+    }
+  ]
+}
