@@ -54,3 +54,5 @@ const startApp = () => {
 };
 
 startApp();
+
+export default app;

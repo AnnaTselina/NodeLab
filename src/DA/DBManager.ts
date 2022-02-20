@@ -24,10 +24,12 @@ export let LastRatingsRepository: ILastRatingsRepository;
 
 export const dbConnection = async () => {
   if (process.env['DB']) {
-    if (process.env['DB'] === 'mongo') {
-      await mongoDBConnect();
-    } else {
-      await postgreSQLConnect();
+    if (process.env['NODE_ENV'] !== 'test') {
+      if (process.env['DB'] === 'mongo') {
+        await mongoDBConnect();
+      } else {
+        await postgreSQLConnect();
+      }
     }
     ProductRepository = getProductRepository();
     CategoryRepository = getCategoryRepository();
