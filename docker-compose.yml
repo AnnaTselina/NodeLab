@@ -10,6 +10,19 @@ services:
     volumes:
       - mongo_db:/data/db
 
+  pg_db:
+    container_name: pg_db_container
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USERNAME: ${POSTGRESQL_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
+      POSTGRES_DATABASE: ${POSTGRESQL_DATABASE}
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
   api:
     container_name: node_container
     build: .
@@ -19,6 +32,8 @@ services:
       - .env
     depends_on:
       - mongo_db
+      - pg_db
 
 volumes:
   mongo_db: {}
+  postgres: {}
