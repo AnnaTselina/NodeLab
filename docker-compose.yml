@@ -1,0 +1,39 @@
+version: '3.9'
+
+services:
+  mongo_db:
+    container_name: mongo_db_container
+    image: mongo:4.1.3
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo_db:/data/db
+
+  pg_db:
+    container_name: pg_db_container
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USERNAME: ${POSTGRESQL_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
+      POSTGRES_DATABASE: ${POSTGRESQL_DATABASE}
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+  api:
+    container_name: node_container
+    build: .
+    ports:
+      - 3000:3000
+    env_file:
+      - .env
+    depends_on:
+      - mongo_db
+      - pg_db
+
+volumes:
+  mongo_db: {}
+  postgres: {}
